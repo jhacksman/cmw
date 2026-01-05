@@ -55,9 +55,16 @@ These insights come directly from Dean Pierce's conversations in the Telegram gr
    - Capitalizations
    - Trailing garbage
 
-7. **Leetspeak patterns** (from Dean): "p455", "p@$$", and combinations
+7. **Leetspeak patterns** (from Dean): 
+   - `a` -> `@`, `4`
+   - `s` -> `$`, `5`
+   - `pass` -> `p455`, `p@$$`
+   - `R` -> `|2` (maybe, but rare)
+   - **NOT used**: `7` for `r` (never), pipe character `|` in passwords (never)
 
 8. **Trailing characters** (from Dean): Likely 1, 3, or maybe 6 characters at the end - exclamations (!), question marks (?), tildes (~), or backticks (`)
+
+9. **NOT relevant**: Game of Thrones references (Dean didn't watch until season 4, ~2014)
 
 ### Timeline Context
 

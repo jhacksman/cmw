@@ -38,7 +38,12 @@ This document summarizes all known attempts to crack Dean Pierce's Bitcoin walle
 5. **Length**: Approximately 20 characters (Bitcoin-Qt minimum was ~16)
 6. **Complexity**: Likely lowercase with possible mutations
 7. **Leetspeak patterns**: Dean has used "p455", "p@$$", and combinations
+   - `a` -> `@`, `4`
+   - `s` -> `$`, `5`
+   - `R` -> `|2` (maybe, but rare)
+   - **NOT used**: `7` for `r` (never), pipe character `|` (never)
 8. **Trailing characters**: Likely 1, 3, or maybe 6 characters - exclamations (!), question marks (?), tildes (~), or backticks (`)
+9. **NOT relevant**: Game of Thrones references (didn't watch until ~2014)
 
 ### Timeline Evidence
 
