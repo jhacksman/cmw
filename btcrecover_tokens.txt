@@ -1,0 +1,81 @@
+# BTCRecover Token List for Dean Pierce's Bitcoin Wallet
+# Based on Dean's confirmed patterns and hints
+# Usage: python btcrecover.py --wallet wallet.dat --tokenlist btcrecover_tokens.txt --enable-gpu
+
+# Core statement words (high priority)
+this
+is
+a
+
+# Intensifiers
+very
+really
+such
+so
+
+# Adjectives - self-deprecating (HIGHEST PRIORITY)
+bad
+dumb
+derpy
+stupid
+terrible
+awful
+weak
+simple
+easy
+lazy
+lulzy
+lulz
+lame
+crappy
+shitty
+silly
+ridiculous
+embarrassing
+pathetic
+horrible
+worst
+
+# Nouns - password-related
+password
+passphrase
+pass
+passwd
+pw
+secret
+key
+
+# Leetspeak variations (Dean's confirmed patterns)
+# p455 (pass)
+p455
+p@$$
+p4ss
+pa$$
+
+# Additional 2011 slang
+rofl
+potato
+fail
+epic
+
+# Trailing patterns (BTCRecover will combine these with other tokens)
+!
+?
+~
+`
+1
+!!!
+???
+~~~
+123
+111
+!!!!!!
+??????
+123456
+111111
+
+# NOTE: BTCRecover syntax
+# - One token per line
+# - Tokens are combined based on --max-tokens parameter
+# - Use spaces to separate words: "this is a bad password"
+# - For custom patterns, use --typos and --delimiter-typos options
