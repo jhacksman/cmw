@@ -1,10 +1,10 @@
-# Spite Password Theory - Attempt
+# Spite Password Hypothesis - Attempt
 
 **Date:** 2026-01-05
 **Status:** Ready to Test
 **Priority:** HIGHEST (untested search space)
 
-## Theory
+## Hypothesis
 
 Dean said he set the password to the "**weakest possible thing out of spite**" - not a complex multi-word passphrase.
 
@@ -34,7 +34,7 @@ Everyone tested up to 6-9 characters and assumed multi-word passphrases. **Nobod
 ## Quick Test
 
 ```bash
-cd attempts/spite-password-theory
+cd attempts/spite-password-hypothesis
 
 # Test with hashcat
 hashcat -m 11300 -a 0 ../../wallet_hash.txt spite_passwords_10char.txt
