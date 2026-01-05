@@ -101,12 +101,70 @@ The `archive/attempt-1/` directory contains wallet encryption testing scripts th
 - Various combinatorics generators have been built
 - Hashtopolis distributed cracking has been discussed
 
+## ⚡ RECOMMENDED APPROACH (Research-Backed)
+
+**After extensive research into password cracking methodologies**, we've identified more efficient approaches than pre-generating massive wordlists.
+
+### 📚 Read These First
+
+1. **[RESEARCH_ANALYSIS.md](RESEARCH_ANALYSIS.md)** - Academic research & industry best practices
+2. **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** - Step-by-step cracking guide
+
+### 🎯 Priority Methods (10-100x more efficient)
+
+| Method | Tool | Efficiency | Time |
+|--------|------|------------|------|
+| **1. Token Lists** | BTCRecover | Highest (purpose-built) | Hours-Days |
+| **2. Rules-Based** | Hashcat + custom rules | Very High | Hours |
+| **3. PRINCE** | princeprocessor | High | Hours-Days |
+| **4. Hybrid** | Hashcat -a 6/7 | High | Minutes-Hours |
+
+### 🚀 Quick Start (Recommended)
+
+```bash
+# Method 1: BTCRecover (if you have wallet.dat)
+git clone https://github.com/gurnec/btcrecover.git
+cd btcrecover
+pip install -r requirements.txt
+python3 btcrecover.py --wallet wallet.dat --tokenlist ../btcrecover_tokens.txt --max-tokens 7 --enable-gpu
+
+# Method 2: Hashcat with custom rules (hash-only)
+hashcat -m 11300 -a 0 wallet_hash.txt base_phrases_curated.txt -r hashcat_rules/dean_patterns.rule
+
+# Method 3: PRINCE processor (multi-word combinations)
+git clone https://github.com/hashcat/princeprocessor.git
+cd princeprocessor && make
+./princeprocessor --elem-cnt-min=4 --elem-cnt-max=7 < ../prince_words.txt | hashcat -m 11300 ../wallet_hash.txt
+```
+
+See **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** for complete instructions.
+
+### 📁 Research-Backed Files
+
+| File | Purpose | Size |
+|------|---------|------|
+| `btcrecover_tokens.txt` | Token list for BTCRecover | 2 KB |
+| `hashcat_rules/dean_patterns.rule` | Custom hashcat rules (Dean's patterns) | 15 KB |
+| `prince_words.txt` | Single words for PRINCE combinations | 500 B |
+| `base_phrases_curated.txt` | High-priority base phrases | 2 KB |
+
+**Total: ~20 KB** (vs 500MB-5GB for pre-generated wordlists)
+
+---
+
 ## Repository Structure
 
 ```
 cmw/
 ├── README.md                           # This file
-├── METHODOLOGY.md                      # Detailed methodology and next steps
+├── RESEARCH_ANALYSIS.md                # 🆕 Academic research & methodology analysis
+├── IMPLEMENTATION_GUIDE.md             # 🆕 Step-by-step cracking guide
+├── METHODOLOGY.md                      # Original methodology notes
+├── btcrecover_tokens.txt               # 🆕 Token list for BTCRecover
+├── base_phrases_curated.txt            # 🆕 Curated high-priority phrases
+├── prince_words.txt                    # 🆕 Words for PRINCE processor
+├── hashcat_rules/
+│   └── dean_patterns.rule              # 🆕 Custom hashcat rules
 ├── generate_base_phrases.sh            # Generates base passphrase combinations
 ├── generate_leetspeak_mutations.sh     # Applies leetspeak transformations
 ├── generate_trailing_chars.sh          # Adds trailing characters (!?~` etc)
@@ -117,13 +175,16 @@ cmw/
 │   │   ├── README.md                   # Original crackmywallet.org README
 │   │   ├── *.sh                        # Wallet testing scripts
 │   │   └── ...                         # Bitcoin version test environments
-│   └── telegram/                       # Telegram chat history
-│       ├── result.json                 # Full chat export
-│       ├── photos/                     # Shared images
-│       └── files/                      # Shared files
+│   ├── telegram/                       # Telegram chat history
+│   │   ├── result.json                 # Full chat export
+│   │   ├── photos/                     # Shared images
+│   │   └── files/                      # Shared files
+│   └── signal-chat-with-px.md          # Signal conversation with Dean
 ```
 
-## Quick Start: Using the Password Generators
+## Alternative: Pre-Generated Wordlists (Less Efficient)
+
+**Note:** The scripts below generate large pre-computed wordlists. While comprehensive, they are **less efficient** than the research-backed approaches above. Consider using BTCRecover, hashcat rules, or PRINCE instead.
 
 This repository includes automated scripts to generate password candidates based on all the intelligence gathered about Dean's passphrase habits.
 
