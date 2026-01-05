@@ -105,18 +105,126 @@ The `archive/attempt-1/` directory contains wallet encryption testing scripts th
 
 ```
 cmw/
-├── README.md                    # This file
-├── METHODOLOGY.md               # Detailed methodology and next steps
+├── README.md                           # This file
+├── METHODOLOGY.md                      # Detailed methodology and next steps
+├── generate_base_phrases.sh            # Generates base passphrase combinations
+├── generate_leetspeak_mutations.sh     # Applies leetspeak transformations
+├── generate_trailing_chars.sh          # Adds trailing characters (!?~` etc)
+├── generate_all_combinations.sh        # Master script - runs all generators
+├── test_workflow.sh                    # Control test & workflow instructions
 ├── archive/
-│   ├── attempt-1/               # Previous cracking attempt files
-│   │   ├── README.md            # Original crackmywallet.org README
-│   │   ├── *.sh                 # Wallet testing scripts
-│   │   └── ...                  # Bitcoin version test environments
-│   └── telegram/                # Telegram chat history
-│       ├── result.json          # Full chat export
-│       ├── photos/              # Shared images
-│       └── files/               # Shared files
+│   ├── attempt-1/                      # Previous cracking attempt files
+│   │   ├── README.md                   # Original crackmywallet.org README
+│   │   ├── *.sh                        # Wallet testing scripts
+│   │   └── ...                         # Bitcoin version test environments
+│   └── telegram/                       # Telegram chat history
+│       ├── result.json                 # Full chat export
+│       ├── photos/                     # Shared images
+│       └── files/                      # Shared files
 ```
+
+## Quick Start: Using the Password Generators
+
+This repository includes automated scripts to generate password candidates based on all the intelligence gathered about Dean's passphrase habits.
+
+### Step-by-Step Workflow
+
+#### 1. Generate Password Lists
+
+Run the master script to generate all password candidates:
+
+```bash
+chmod +x generate_all_combinations.sh
+./generate_all_combinations.sh
+```
+
+This will create three tier-based wordlists:
+- **tier1_base_and_trailing.txt** - Highest priority candidates (start here)
+- **tier2_leetspeak.txt** - Medium priority with leetspeak mutations
+- **tier3_leetspeak_trailing.txt** - Lower priority (largest set)
+- **all_candidates.txt** - All candidates combined
+
+#### 2. Crack with John the Ripper
+
+**Install John the Ripper** (if needed):
+```bash
+# Ubuntu/Debian
+sudo apt-get install john
+
+# macOS
+brew install john-jumbo
+```
+
+**Run the attack** (try tier 1 first):
+```bash
+# Create the hash file
+cat > wallet_hash.txt << 'EOF'
+$bitcoin$96$3fa8554bcc7f1adb4dee43327a2680be93112f8c11e9cbff7561038eddf258827dd38c72354695fc70d4a01102d22c48$16$14bff2455913f62c$25000$96$ad32dfdce53d6c1c7beb7c25f6c2a2730dc136201fe2423f57745743a5d78711b25c0c49c05092af9b8af506da74d066$130$04ffc8348b3538d3a865c4c0c359a7b4eefa687f2ecffda0aa763b58143df7d7ee7cbdbd62ce9fe6608e6c959c406cee192e35a4838e4f2f923d417ff09d0fd6ad
+EOF
+
+# Run John the Ripper on tier 1
+john --wordlist=tier1_base_and_trailing.txt --format=bitcoin wallet_hash.txt
+
+# If tier 1 doesn't work, try tier 2
+john --wordlist=tier2_leetspeak.txt --format=bitcoin wallet_hash.txt
+
+# If tier 2 doesn't work, try tier 3
+john --wordlist=tier3_leetspeak_trailing.txt --format=bitcoin wallet_hash.txt
+```
+
+#### 3. Alternative: Crack with Hashcat (GPU-accelerated)
+
+Hashcat is typically faster if you have a GPU:
+
+```bash
+# Install hashcat
+sudo apt-get install hashcat  # Ubuntu/Debian
+brew install hashcat          # macOS
+
+# Run hashcat with mode 11300 (Bitcoin wallet)
+hashcat -m 11300 -a 0 wallet_hash.txt tier1_base_and_trailing.txt
+
+# Check if cracked
+hashcat -m 11300 wallet_hash.txt --show
+```
+
+#### 4. Test Your Setup (Optional)
+
+Run the test workflow script to verify everything is configured correctly:
+
+```bash
+chmod +x test_workflow.sh
+./test_workflow.sh
+```
+
+This creates test files and shows detailed instructions for both John the Ripper and Hashcat.
+
+### Understanding the Scripts
+
+- **generate_base_phrases.sh** - Creates base phrases like "this is a bad password" with variations in:
+  - Prefixes (this is a, this is a really, etc.)
+  - Adjectives (bad, dumb, derpy, etc.)
+  - Nouns (password, passphrase, pass, etc.)
+  - Separators (spaces, periods, dashes)
+  - Capitalization (lowercase, Title Case, First letter caps)
+
+- **generate_leetspeak_mutations.sh** - Applies Dean's known leetspeak patterns:
+  - `pass` → `p455`, `p@$$`
+  - `a` → `@`, `4`
+  - `s` → `$`, `5`
+  - `e` → `3`
+  - `i` → `1`
+  - `o` → `0`
+  - Multiple combinations of the above
+
+- **generate_trailing_chars.sh** - Adds trailing characters Dean mentioned:
+  - Single chars: `!`, `?`, `~`, `` ` ``, `1`
+  - Three chars: `!!!`, `???`, `123`, `!?!`, etc.
+  - Six chars: `!!!!!!`, `123456`, etc.
+
+### What If You Crack It?
+
+Tweet the password to [@deanpierce](https://twitter.com/deanpierce) to claim the 5 BTC bounty!
 
 ## How to Contribute
 
