@@ -122,17 +122,39 @@ Dean frequently uses this self-deprecating pattern in commit messages:
 - passwords.today
 - crackmywallet (the challenge itself)
 
+## Social Media Findings
+
+### Mastodon (@deanpierce@defcon.social)
+- **CRITICAL: Has potato emoji 🥔 in display name** - confirms "potato" is significant to Dean
+- Bio: "Security researcher from Portland Oregon. Locally affiliated with PDX2600, RainSec, Sophsec, CtrlH, PDX Bitcoin, BSidesPDX, HackBoat"
+- 292 posts, joined Nov 2022
+
+### deanpierce.net Website
+- Project "Seeds of Contempt" - contempt/spite theme aligns with "spite password" theory
+- Talk titles show casual naming: "They Put Money on the Internet!", "DIY Black Badge"
+- Project names: stupid.site, hack.guru, ponzi.finance, crackmywallet
+
 ## Blog Writing Style (pxdojo.net)
 
-From the 2011 blog post about mtgox trading bot:
-- Uses "just for kicks"
-- Uses "dead simple"
-- Uses "no time at all"
-- Uses "shoot your foot off"
-- Uses "#YOLO" (in 2017 post)
-- Uses "Shut up, that's why"
-- Uses "if it's stupid, and it works, it's not stupid"
-- Uses "Shitposting on reddit" (self-description)
+### 2011 Blog Post (December 28, 2011 - CRITICAL: closest to wallet creation)
+"A simple mtgox auto trading bot in python"
+- "Just for kicks" - casual expression
+- "dead simple" - casual technical language
+- "take no time at all" - casual expression
+- "Good luck, and be careful not to shoot your foot off!" - casual warning
+- "write some damn code" - casual/expletive
+- "oh no!!" - error handling message in code
+- Variable names: "width", "girth", "high_scrape", "low_scrape" - casual naming
+
+### 2017 Blog Posts
+- "Shitposting on reddit" (self-description in Qubes post)
+- "Shut up, that's why" (Qubes post)
+- "if it's stupid, and it works, it's not stupid" (Qubes post)
+- "#YOLO" (Qubes post)
+- "derpy" used in technical analysis (Ants Don't Have Blood post)
+- "pain in the ass" (SQLMap post)
+- "the ever-loving crap out of" (Qubes post)
+- "the derp-de-doo who implemented this feature" (Ants post)
 
 ## Signal Chat Hints (from user's conversation with Dean)
 - Passphrase likely has spaces or periods between words
@@ -190,6 +212,21 @@ lulz passphrase
 potato passphrase
 this is so derpy
 derpy password
+potato potato potato
+this is potato
+derp de doo
+```
+
+### Priority 3.5: Blog-derived phrases (2011 era)
+```
+just for kicks
+dead simple
+shoot your foot off
+oh no
+write some damn code
+if its stupid and it works
+shut up thats why
+shitposting on reddit
 ```
 
 ### Priority 4: Elongated/emphasis patterns
@@ -240,5 +277,23 @@ whoops bad password
 - o -> 0
 - Combinations: p@$$phr@$e, p455phr453, etc.
 
+## Additional Findings from Complete Analysis
+
+### Confirmed Patterns
+1. **Potato is significant** - Dean has potato emoji in Mastodon display name, "added potato" in commits
+2. **"X is hard" is a consistent pattern** - found across many repos: tables, spelling, datatypes, numbers, markdown, flask, typing, copypasta, grammar
+3. **Self-deprecating humor** - consistent across all platforms (GitHub, blog, socials)
+4. **Casual/expletive language** - "damn", "shit", "fuck", "crap" appear in commits and blog
+5. **2011 era slang** - derp, potato, lulz were popular when wallet was created
+
+### Key Insight
+The wallet was encrypted after September 27, 2011 (Bitcoin 0.4.0 release). Dean's December 2011 blog post shows his writing style at that exact time period - casual, self-deprecating, using phrases like "just for kicks", "dead simple", and "shoot your foot off".
+
+### Most Likely Password Structures (based on all evidence)
+1. Self-deprecating phrase about the passphrase itself: "this is a [bad/dumb/stupid/derpy] passphrase"
+2. "X is/are hard/dumb/stupid" pattern: "passphrases are hard", "passwords are dumb"
+3. 2011 slang integration: "derpy passphrase", "potato passphrase"
+4. Spite-based: deliberately weak, possibly mocking the security prompt
+
 ---
-Last updated: 2026-01-06
+Last updated: 2026-01-06 (added website/social analysis)
