@@ -5,9 +5,16 @@
     'use strict';
 
     // ============================================
+    // API CONFIGURATION
+    // ============================================
+    // Backend API URL - deployed on fly.io
+    const API_URL = window.NOSTALGIA_API_URL || 'https://app-alxmhaah.fly.dev';
+
+    // ============================================
     // STATE MANAGEMENT
     // ============================================
     const state = {
+        sessionId: localStorage.getItem('nostalgia_session_id') || null,
         abAnswers: {},
         passwordGuesses: [],
         currentView: 'main', // 'main', 'ab', 'guess', 'games'
@@ -16,6 +23,55 @@
         floatingElements: [],
         timelineIndex: 0
     };
+
+    // ============================================
+    // API FUNCTIONS
+    // ============================================
+    async function saveABAnswers() {
+        try {
+            const response = await fetch(`${API_URL}/api/ab-answers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    session_id: state.sessionId,
+                    answers: state.abAnswers
+                })
+            });
+            const data = await response.json();
+            if (data.session_id) {
+                state.sessionId = data.session_id;
+                localStorage.setItem('nostalgia_session_id', data.session_id);
+            }
+            console.log('A/B answers saved:', data);
+            return data;
+        } catch (error) {
+            console.error('Failed to save A/B answers:', error);
+            return null;
+        }
+    }
+
+    async function savePasswordGuesses() {
+        try {
+            const response = await fetch(`${API_URL}/api/password-guesses`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    session_id: state.sessionId,
+                    guesses: state.passwordGuesses
+                })
+            });
+            const data = await response.json();
+            if (data.session_id) {
+                state.sessionId = data.session_id;
+                localStorage.setItem('nostalgia_session_id', data.session_id);
+            }
+            console.log('Password guesses saved:', data);
+            return data;
+        } catch (error) {
+            console.error('Failed to save password guesses:', error);
+            return null;
+        }
+    }
 
     // ============================================
     // FLOATING TIMELINE SYSTEM (bumble.0x88.net/v style)
@@ -189,6 +245,9 @@
                 }, 200);
                 
                 console.log('A/B Answers:', state.abAnswers);
+                
+                // Save to backend
+                saveABAnswers();
             });
         });
     }
@@ -210,6 +269,9 @@
                 }
                 
                 state.passwordGuesses = guesses;
+                
+                // Save to backend
+                savePasswordGuesses();
                 
                 // Show results
                 showResults();
@@ -317,20 +379,10 @@
     }
 
     // ============================================
-    // BOTTOM NAVIGATION
+    // BOTTOM NAVIGATION & MODAL HANDLING
     // ============================================
     function initBottomNav() {
-        // Create bottom navigation bar
-        const nav = document.createElement('div');
-        nav.id = 'bottom-nav';
-        nav.innerHTML = `
-            <button id="nav-ab" class="nav-btn">A/B Test</button>
-            <button id="nav-guess" class="nav-btn">Guess Password</button>
-            <button id="nav-games" class="nav-btn">Play Games</button>
-        `;
-        document.body.appendChild(nav);
-        
-        // Add styles for bottom nav
+        // Add styles for floating elements (injected dynamically)
         const style = document.createElement('style');
         style.textContent = `
             #bottom-nav {
@@ -338,7 +390,7 @@
                 bottom: 80px;
                 left: 50%;
                 transform: translateX(-50%);
-                z-index: 100;
+                z-index: 50;
                 display: flex;
                 gap: 15px;
                 background: rgba(0,0,0,0.8);
@@ -460,68 +512,6 @@
                 box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             }
             
-            /* Games modal */
-            #games-modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.9);
-                z-index: 1000;
-                justify-content: center;
-                align-items: center;
-            }
-            
-            #games-modal.active {
-                display: flex;
-            }
-            
-            .games-content {
-                background: #1a1a2e;
-                padding: 40px;
-                border-radius: 20px;
-                max-width: 600px;
-                text-align: center;
-            }
-            
-            .games-content h2 {
-                font-family: 'Press Start 2P', cursive;
-                color: #f39c12;
-                margin-bottom: 30px;
-            }
-            
-            .game-links {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .game-link {
-                padding: 20px;
-                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-                border-radius: 15px;
-                color: #fff;
-                text-decoration: none;
-                font-size: 1.1rem;
-                transition: transform 0.3s;
-            }
-            
-            .game-link:hover {
-                transform: scale(1.05);
-            }
-            
-            .close-modal {
-                margin-top: 30px;
-                padding: 10px 30px;
-                background: #e74c3c;
-                border: none;
-                border-radius: 20px;
-                color: #fff;
-                cursor: pointer;
-            }
-            
             @media (max-width: 768px) {
                 #bottom-nav {
                     flex-direction: column;
@@ -537,54 +527,61 @@
         `;
         document.head.appendChild(style);
         
-        // Event listeners
+        // Event listeners for bottom nav buttons
         document.getElementById('nav-ab').addEventListener('click', () => {
-            document.getElementById('ab-section').scrollIntoView({ behavior: 'smooth' });
+            openModal('ab-modal');
         });
         
         document.getElementById('nav-guess').addEventListener('click', () => {
-            document.getElementById('guess-section').scrollIntoView({ behavior: 'smooth' });
+            openModal('guess-modal');
         });
         
         document.getElementById('nav-games').addEventListener('click', () => {
-            showGamesModal();
+            openModal('games-modal');
+            // Load video when games modal opens
+            const video = document.getElementById('game-video');
+            if (video && !video.src) {
+                video.src = 'https://www.youtube.com/embed/eSMeUPFjQHc?autoplay=1';
+            }
+        });
+        
+        // Setup modal close buttons
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = this.closest('.modal-overlay');
+                closeModal(modal.id);
+            });
+        });
+        
+        // Close modal when clicking outside content
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
         });
     }
     
-    function showGamesModal() {
-        // Create modal if it doesn't exist
-        let modal = document.getElementById('games-modal');
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'games-modal';
-            modal.innerHTML = `
-                <div class="games-content">
-                    <h2>2011 Browser Games</h2>
-                    <div class="game-links">
-                        <a href="https://poki.com/en/g/qwop" target="_blank" class="game-link">
-                            QWOP - The Impossible Running Game
-                        </a>
-                        <a href="https://poki.com/en/g/robot-unicorn-attack" target="_blank" class="game-link">
-                            Robot Unicorn Attack - Always I Wanna Be With You
-                        </a>
-                    </div>
-                    <button class="close-modal">Close</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            modal.querySelector('.close-modal').addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
         }
-        
-        modal.classList.add('active');
+    }
+    
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            // Stop video when closing games modal
+            if (modalId === 'games-modal') {
+                const video = document.getElementById('game-video');
+                if (video) {
+                    video.src = '';
+                }
+            }
+        }
     }
 
     // ============================================
