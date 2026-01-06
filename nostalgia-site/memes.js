@@ -287,54 +287,247 @@ const TIMELINE_2011 = [
 // MEME IMAGES (2011 era authentic)
 // ============================================
 const MEME_SOURCES = [
-    // Nyan Cat - THE 2011 meme
+    // === ANIMATED GIFS ===
+    // Nyan Cat - THE 2011 meme (multiple versions)
     {
         url: 'https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif',
         name: 'Nyan Cat',
-        size: 100
+        size: 120,
+        isGif: true
     },
-    // Trollface
     {
-        url: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
+        url: 'https://media.giphy.com/media/3o85xoi6nNqJQJ95Qc/giphy.gif',
+        name: 'Nyan Cat Rainbow',
+        size: 100,
+        isGif: true
+    },
+    // Dancing Baby (classic internet)
+    {
+        url: 'https://media.giphy.com/media/l0MYyv6UK0Bd4DE76/giphy.gif',
+        name: 'Dancing',
+        size: 80,
+        isGif: true
+    },
+    // Keyboard Cat
+    {
+        url: 'https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif',
+        name: 'Keyboard Cat',
+        size: 100,
+        isGif: true
+    },
+    // Deal With It glasses
+    {
+        url: 'https://media.giphy.com/media/ENagATV1Gr9eg/giphy.gif',
+        name: 'Deal With It',
+        size: 80,
+        isGif: true
+    },
+    // Dramatic Chipmunk
+    {
+        url: 'https://media.giphy.com/media/kKdgdeuO2M08M/giphy.gif',
+        name: 'Dramatic Look',
+        size: 90,
+        isGif: true
+    },
+    // Rick Roll (classic)
+    {
+        url: 'https://media.giphy.com/media/Ju7l5y9osyymQ/giphy.gif',
+        name: 'Rick Roll',
+        size: 100,
+        isGif: true
+    },
+    // Trollface animated
+    {
+        url: 'https://media.giphy.com/media/amxLHEPgGDCKs/giphy.gif',
+        name: 'Trollface Animated',
+        size: 80,
+        isGif: true
+    },
+    // Spinning rainbow
+    {
+        url: 'https://media.giphy.com/media/l4FGpPki5v2Bcd6Ss/giphy.gif',
+        name: 'Rainbow Spin',
+        size: 70,
+        isGif: true
+    },
+    // Hacker typing
+    {
+        url: 'https://media.giphy.com/media/YQitE4YNQNahy/giphy.gif',
+        name: 'Hacking',
+        size: 100,
+        isGif: true
+    },
+    // Matrix code
+    {
+        url: 'https://media.giphy.com/media/sULKEgDMX8LcI/giphy.gif',
+        name: 'Matrix',
+        size: 90,
+        isGif: true
+    },
+    
+    // === RAGE COMICS / MEME FACES ===
+    // Trollface (static)
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/091/TrollFace.jpg',
         name: 'Trollface',
         size: 80
     },
     // Forever Alone
     {
-        url: 'https://i.imgflip.com/1c1uej.jpg',
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/003/619/ForeverAlone.jpg',
         name: 'Forever Alone',
         size: 70
     },
     // Y U NO
     {
-        url: 'https://i.imgflip.com/1bgw.jpg',
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/004/006/y-u-no-guy.jpg',
         name: 'Y U NO',
         size: 80
     },
     // Me Gusta
     {
-        url: 'https://i.imgflip.com/9sw2.jpg',
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/002/252/NoMeGusta.jpg',
         name: 'Me Gusta',
         size: 70
     },
-    // Rage Face
+    // Rage Face / FFFUUU
     {
-        url: 'https://i.imgflip.com/1bij.jpg',
-        name: 'Rage Face',
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/063/Rage.jpg',
+        name: 'FFFUUU',
         size: 70
     },
+    // Okay Guy
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/003/617/OkayGuy.jpg',
+        name: 'Okay',
+        size: 70
+    },
+    // Challenge Accepted
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/004/457/challenge.jpg',
+        name: 'Challenge Accepted',
+        size: 70
+    },
+    // Cereal Guy
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/002/686/cereal_guy.jpg',
+        name: 'Cereal Guy',
+        size: 70
+    },
+    // Poker Face
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/003/193/1279052383758.jpg',
+        name: 'Poker Face',
+        size: 70
+    },
+    // LOL Face
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/281/lolface.jpg',
+        name: 'LOL Face',
+        size: 70
+    },
+    // Derp
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/006/423/ragecomic.png',
+        name: 'Derp',
+        size: 70
+    },
+    // Not Bad Obama
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/006/151/ObamaNotBad.jpg',
+        name: 'Not Bad',
+        size: 80
+    },
+    
+    // === CLASSIC 2011 MEMES ===
+    // Futurama Fry - Not Sure If
+    {
+        url: 'https://i.imgflip.com/1bgw.jpg',
+        name: 'Not Sure If',
+        size: 90
+    },
+    // Success Kid
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/745/success.jpg',
+        name: 'Success Kid',
+        size: 80
+    },
+    // Bad Luck Brian
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/006/707/nothing-to-do-here-template.jpg',
+        name: 'Nothing To Do Here',
+        size: 80
+    },
+    // Philosoraptor
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/046/Philosoraptor.jpg',
+        name: 'Philosoraptor',
+        size: 80
+    },
+    // Scumbag Steve
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/006/026/NOTSUREIF.jpg',
+        name: 'Scumbag',
+        size: 80
+    },
+    // Good Guy Greg
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/007/508/neildegrasse.jpg',
+        name: 'Good Guy',
+        size: 80
+    },
+    // Ancient Aliens Guy
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/005/848/Aliens.jpg',
+        name: 'Aliens',
+        size: 80
+    },
+    // One Does Not Simply
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/007/784/14-one-does-not-simply.jpg',
+        name: 'One Does Not Simply',
+        size: 90
+    },
+    // Doge (early version)
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/013/564/doge.jpg',
+        name: 'Doge',
+        size: 90
+    },
+    // All The Things
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/006/199/x-all-the-y.png',
+        name: 'All The Things',
+        size: 80
+    },
+    // Shut Up And Take My Money
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/005/574/takemymoney.jpg',
+        name: 'Take My Money',
+        size: 80
+    },
+    
+    // === HACKER / TECH MEMES ===
     // Bitcoin logo (2011 era)
     {
         url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/200px-Bitcoin.svg.png',
         name: 'Bitcoin',
         size: 60
     },
-    // Doge (early version)
+    // Anonymous mask
     {
-        url: 'https://i.imgflip.com/4t0m5.jpg',
-        name: 'Doge',
-        size: 80
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/200px-Anonymous_emblem.svg.png',
+        name: 'Anonymous',
+        size: 70
     },
+    // Hackerman
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/021/807/ig9OoyenpxqdCQyABmOQBZDI0duHk2QZZmWg2Hxd4ro.jpg',
+        name: 'Hackerman',
+        size: 90
+    },
+    
+    // === POTATO / POOP (Dean references) ===
     // Potato
     {
         url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Patates.jpg/220px-Patates.jpg',
@@ -346,6 +539,60 @@ const MEME_SOURCES = [
         url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Twemoji_1f4a9.svg/200px-Twemoji_1f4a9.svg.png',
         name: 'Poop',
         size: 50
+    },
+    // I Can Has Cheezburger
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/774/lime-cat.jpg',
+        name: 'Lime Cat',
+        size: 80
+    },
+    // Ceiling Cat
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/016/ceilingcat.jpg',
+        name: 'Ceiling Cat',
+        size: 80
+    },
+    // Longcat
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/076/longcat.jpg',
+        name: 'Longcat',
+        size: 100
+    },
+    // Lolcat
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/026/lolcat.jpg',
+        name: 'LOLcat',
+        size: 80
+    },
+    // Pedobear (classic 4chan)
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/000/005/pedobear.jpg',
+        name: 'Pedobear',
+        size: 70
+    },
+    // This Is Fine
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/018/012/this_is_fine.jpeg',
+        name: 'This Is Fine',
+        size: 90
+    },
+    // Ermahgerd
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/009/479/Ermahgerd.jpg',
+        name: 'Ermahgerd',
+        size: 80
+    },
+    // Overly Attached Girlfriend
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/010/496/Overly_attached_GF.jpg',
+        name: 'Overly Attached',
+        size: 80
+    },
+    // Grumpy Cat
+    {
+        url: 'https://i.kym-cdn.com/entries/icons/original/000/014/285/sidecat.jpg',
+        name: 'Grumpy Cat',
+        size: 80
     }
 ];
 

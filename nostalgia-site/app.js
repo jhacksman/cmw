@@ -204,14 +204,25 @@
         // Start spawning
         spawnNext();
         
-        // Also spawn some memes
-        if (window.MEME_SOURCES) {
+        // Also spawn memes - more frequently!
+        if (window.MEME_SOURCES && window.MEME_SOURCES.length > 0) {
+            // Spawn several memes immediately at startup
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const meme = window.MEME_SOURCES[Math.floor(Math.random() * window.MEME_SOURCES.length)];
+                    if (meme && meme.url) {
+                        createFloatingElement({ type: 'meme', ...meme });
+                    }
+                }, i * 500); // Stagger initial spawns
+            }
+            
+            // Then spawn new memes every 2-4 seconds (much faster than before)
             setInterval(() => {
                 const meme = window.MEME_SOURCES[Math.floor(Math.random() * window.MEME_SOURCES.length)];
                 if (meme && meme.url) {
                     createFloatingElement({ type: 'meme', ...meme });
                 }
-            }, 8000 + Math.random() * 4000);
+            }, 2000 + Math.random() * 2000);
         }
     }
 
