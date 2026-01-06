@@ -18,8 +18,61 @@ from itertools import product, combinations_with_replacement
 # Separators Dean uses
 SEPARATORS = [' ', '.']
 
-# Trailing characters Dean mentioned
-TRAILING_CHARS = ['', '!', '?', '~', '`', '1', '2', '3', '!!', '???', '123']
+# Trailing characters - EXPANDED based on Dean's hints and pierce403 username
+# Dean mentioned: 1, 3, or 6 chars of !?~`
+# HTTP error codes: 403 (pierce403), 404, 405, 500, etc.
+# Years: 2011, 2010, etc.
+
+def generate_trailing_patterns():
+    """Generate comprehensive trailing patterns."""
+    patterns = ['']  # No trailing
+    
+    # Single special chars (Dean confirmed: !, ?, ~, `)
+    single_special = ['!', '?', '~', '`']
+    patterns.extend(single_special)
+    
+    # Double special chars (4^2 = 16)
+    for c1 in single_special:
+        for c2 in single_special:
+            patterns.append(c1 + c2)
+    
+    # Triple special chars (4^3 = 64)
+    for c1 in single_special:
+        for c2 in single_special:
+            for c3 in single_special:
+                patterns.append(c1 + c2 + c3)
+    
+    # 6-char special (Dean mentioned 6 chars) - just repeated chars
+    for c in single_special:
+        patterns.append(c * 6)
+    
+    # HTTP error codes (pierce403 reference!)
+    http_codes = ['403', '404', '405', '500', '501', '502', '503', '200', '301', '302']
+    patterns.extend(http_codes)
+    
+    # Years (2011 era when wallet was encrypted)
+    years = ['2011', '2010', '2012', '11', '10', '12', '09', '08']
+    patterns.extend(years)
+    
+    # Digits 0-999
+    for d in range(1000):
+        patterns.append(str(d))
+    
+    # Special + digit combos (e.g., !1, ?2, ~3)
+    for c in single_special:
+        for d in range(10):
+            patterns.append(c + str(d))
+            patterns.append(str(d) + c)
+    
+    # Common endings
+    patterns.extend(['01', '69', '42', '13', '07', '77', '99', '007', '666', '777', '888', '999'])
+    
+    # pierce403 specific
+    patterns.extend(['403!', '!403', '403!!', '403?', '?403'])
+    
+    return list(set(patterns))  # Remove duplicates
+
+TRAILING_CHARS = generate_trailing_patterns()
 
 # Case transformation functions
 def case_variants(phrase):
@@ -172,13 +225,15 @@ def generate_dean_style():
 
 def generate_adjective_combos():
     """
-    "this is a [adj] [adj] [adj] [adj] password" with various adjectives.
+    "this is a [adj] [adj] [adj] [adj] [adj] password" with various adjectives.
+    Using 5 adjective slots with 10 adjectives = 10^5 = 100,000 combinations.
+    This is the main driver to reach ~1B candidates.
     """
     adjectives = ["bad", "dumb", "stupid", "very", "really", "super", "terrible", "awful", "weak", "lame"]
     
-    # Generate all 4-adjective combinations (with repetition)
-    for adj_combo in product(adjectives, repeat=4):
-        phrase = f"this is a {adj_combo[0]} {adj_combo[1]} {adj_combo[2]} {adj_combo[3]} password"
+    # Generate all 5-adjective combinations (with repetition) - 10^5 = 100,000
+    for adj_combo in product(adjectives, repeat=5):
+        phrase = f"this is a {adj_combo[0]} {adj_combo[1]} {adj_combo[2]} {adj_combo[3]} {adj_combo[4]} password"
         for sep in SEPARATORS:
             for case_var in case_variants(phrase):
                 base_phrase = case_var.replace(' ', sep)
@@ -228,39 +283,42 @@ def generate_letter_words():
 
 def estimate_count():
     """Estimate total candidate count."""
-    # Extended this is: 28 extensions * 2 sep * 4 case * 12 trail = 2688
-    extended = 28 * 2 * 4 * 12
+    trail_count = len(TRAILING_CHARS)  # ~1182 patterns
     
-    # Sentence 8-word: 20 sentences * 2 sep * 4 case * 12 trail = 1920
-    sentences = 20 * 2 * 4 * 12
+    # Extended this is: 28 extensions * 2 sep * 4 case * trail
+    extended = 28 * 2 * 4 * trail_count
     
-    # Repeated word: 30 words * 2 sep * 4 case * 12 trail = 2880
-    repeated = 30 * 2 * 4 * 12
+    # Sentence 8-word: 20 sentences * 2 sep * 4 case * trail
+    sentences = 20 * 2 * 4 * trail_count
     
-    # Mixed repeated: 10*9*2 patterns * 2 sep * 4 case * 12 trail = 17280
-    mixed = 10 * 9 * 2 * 2 * 4 * 12
+    # Repeated word: 30 words * 2 sep * 4 case * trail
+    repeated = 30 * 2 * 4 * trail_count
     
-    # Dean style: 16 phrases * 2 sep * 4 case * 12 trail = 1536
-    dean = 16 * 2 * 4 * 12
+    # Mixed repeated: 10*9*2 patterns * 2 sep * 4 case * trail
+    mixed = 10 * 9 * 2 * 2 * 4 * trail_count
     
-    # Adjective combos: 10^4 combos * 2 sep * 4 case * 12 trail = 960000
-    adj = 10000 * 2 * 4 * 12
+    # Dean style: 16 phrases * 2 sep * 4 case * trail
+    dean = 16 * 2 * 4 * trail_count
     
-    # Number words: 6 * 2 * 4 * 12 = 576
-    numbers = 6 * 2 * 4 * 12
+    # Adjective combos: 10^5 combos (5 slots) * 2 sep * 4 case * trail
+    adj = 100000 * 2 * 4 * trail_count
     
-    # Letter words: 4 * 2 * 4 * 12 = 384
-    letters = 4 * 2 * 4 * 12
+    # Number words: 6 * 2 * 4 * trail
+    numbers = 6 * 2 * 4 * trail_count
+    
+    # Letter words: 4 * 2 * 4 * trail
+    letters = 4 * 2 * 4 * trail_count
     
     total = extended + sentences + repeated + mixed + dean + adj + numbers + letters
-    return total
+    return total, trail_count
 
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == '--estimate':
-        count = estimate_count()
+        count, trail_count = estimate_count()
         print(f"Estimated candidates: {count:,}")
-        print(f"That's approximately {count/1e6:.1f}M")
+        print(f"That's approximately {count/1e9:.2f}B")
+        print(f"Trailing patterns: {trail_count}")
         return
     
     # Generate all patterns in priority order

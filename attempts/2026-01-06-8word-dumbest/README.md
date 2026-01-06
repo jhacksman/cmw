@@ -1,6 +1,6 @@
 # 8-Word "Dumbest Possible" Passphrase Attempt
 
-**Estimated candidates:** ~1M
+**Estimated candidates:** ~948M (~0.95B)
 **Target:** 8-word passphrases that meet the Bitcoin advisory "eight or more words"
 
 ## Rationale
@@ -22,14 +22,19 @@ From Telegram archive:
 3. **Dean's commit-style phrases** - Based on his GitHub patterns (e.g., "tables are hard and so is this")
 4. **Repeated words** - Single word 8 times (e.g., "bad bad bad bad bad bad bad bad")
 5. **Mixed repeated** - Two words alternating or split (e.g., "bad bad bad bad dumb dumb dumb dumb")
-6. **Adjective combinations** - "this is a [adj] [adj] [adj] [adj] password" with 10^4 combinations
+6. **Adjective combinations** - "this is a [adj]x5 password" with 10^5 = 100,000 combinations (main driver of candidate count)
 7. **Number/letter words** - Simple sequences (e.g., "one two three four five six seven eight")
 
 ## Variations Applied
 
 - **Separators:** space (most likely), dot (sometimes)
 - **Case:** lowercase, UPPERCASE, Title Case, First word capitalized
-- **Trailing chars:** none, !, ?, ~, `, 1, 2, 3, !!, ???, 123
+- **Trailing patterns:** ~1,182 options including:
+  - HTTP error codes: 403, 404, 405, 500, etc. (pierce403 reference!)
+  - Years: 2011, 2010, 2012, etc.
+  - Digits 0-999
+  - Special chars: !, ?, ~, ` (single, double, triple, 6x)
+  - Special+digit combos: !1, ?2, ~3, etc.
 
 ## Usage
 
