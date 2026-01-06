@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>December 2011 - Remember?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+    
+    <!-- Floating memes container -->
+    <div id="meme-container"></div>
+    
+    <!-- Main content overlay -->
+    <div id="main-content">
+        <div id="header">
+            <h1>December 2011</h1>
+            <p class="subtitle">Remember when you set that Bitcoin wallet password?</p>
+            <p class="date-context">CMU Winter Break - Your brother was home...</p>
+        </div>
+        
+        <!-- Bitcoin wallet password prompt (mimicking 2011 Bitcoin-Qt) -->
+        <div id="wallet-prompt">
+            <div class="wallet-header">
+                <span class="wallet-icon">&#8383;</span>
+                <span>Bitcoin - Encrypt Wallet</span>
+            </div>
+            <div class="wallet-body">
+                <p>Enter a passphrase to encrypt your wallet.</p>
+                <p class="hint">Use 10 or more random characters, or eight or more words.</p>
+                
+                <div class="input-group">
+                    <label>New passphrase:</label>
+                    <input type="password" id="passphrase1" placeholder="Enter passphrase...">
+                </div>
+                <div class="input-group">
+                    <label>Repeat passphrase:</label>
+                    <input type="password" id="passphrase2" placeholder="Repeat passphrase...">
+                </div>
+                
+                <div class="wallet-buttons">
+                    <button id="btn-ok">OK</button>
+                    <button id="btn-cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Context section -->
+        <div id="context-section">
+            <h2>What was happening in December 2011?</h2>
+            <div class="context-grid">
+                <div class="context-item">
+                    <h3>Bitcoin 0.5.0</h3>
+                    <p>Released November 21, 2011. Wallet encryption was new and exciting.</p>
+                </div>
+                <div class="context-item">
+                    <h3>Kim Jong-il Dies</h3>
+                    <p>December 17, 2011 - Major world news during winter break.</p>
+                </div>
+                <div class="context-item">
+                    <h3>Occupy Wall Street</h3>
+                    <p>"We are the 99%" - Still fresh in everyone's mind.</p>
+                </div>
+                <div class="context-item">
+                    <h3>Nyan Cat</h3>
+                    <p>Peak meme status. Rainbow poptart cat everywhere.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- A/B Questions Section -->
+        <div id="ab-section">
+            <h2>Help Us Narrow It Down</h2>
+            <p class="ab-intro">Answer these questions as if you were setting a password in December 2011...</p>
+            
+            <div class="ab-question" data-question="1">
+                <p class="question-text">1. Separators between words:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="space">Spaces ("this is bad")</button>
+                    <button class="ab-option" data-value="none">No separator ("thisisbad")</button>
+                    <button class="ab-option" data-value="period">Periods ("this.is.bad")</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="2">
+                <p class="question-text">2. Capitalization style:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="lower">all lowercase</button>
+                    <button class="ab-option" data-value="first">First word capitalized</button>
+                    <button class="ab-option" data-value="title">Title Case Each Word</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="3">
+                <p class="question-text">3. Trailing characters:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="none">None</button>
+                    <button class="ab-option" data-value="numbers">Numbers (123, 403, 2011)</button>
+                    <button class="ab-option" data-value="punctuation">Punctuation (!, ?, ~)</button>
+                    <button class="ab-option" data-value="both">Both (123!, 403?)</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="4">
+                <p class="question-text">4. Leetspeak usage:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="none">No leetspeak</button>
+                    <button class="ab-option" data-value="light">Light (@ for a, $ for s)</button>
+                    <button class="ab-option" data-value="heavy">Heavy (p@$$w0rd)</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="5">
+                <p class="question-text">5. Password theme:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="spite">"Spite" password (dumb/bad/stupid)</button>
+                    <button class="ab-option" data-value="phrase">Common phrase</button>
+                    <button class="ab-option" data-value="personal">Personal reference</button>
+                    <button class="ab-option" data-value="random">Random words</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="6">
+                <p class="question-text">6. Word count preference:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="short">Short (2-3 words)</button>
+                    <button class="ab-option" data-value="medium">Medium (4-5 words)</button>
+                    <button class="ab-option" data-value="long">Long (6-8 words)</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="7">
+                <p class="question-text">7. Character length target:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="minimum">Minimum (exactly 10 chars)</button>
+                    <button class="ab-option" data-value="comfortable">Comfortable (12-16 chars)</button>
+                    <button class="ab-option" data-value="long">Long (17+ chars)</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="8">
+                <p class="question-text">8. Potato/poop references:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="yes">Likely included</button>
+                    <button class="ab-option" data-value="no">Probably not</button>
+                    <button class="ab-option" data-value="maybe">Maybe elongated (pooooop)</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="9">
+                <p class="question-text">9. "X is hard" pattern (like "tables are hard"):</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="yes">Sounds like something I'd use</button>
+                    <button class="ab-option" data-value="no">Not my style</button>
+                </div>
+            </div>
+            
+            <div class="ab-question" data-question="10">
+                <p class="question-text">10. 2011 references:</p>
+                <div class="ab-options">
+                    <button class="ab-option" data-value="bitcoin">Bitcoin-related</button>
+                    <button class="ab-option" data-value="memes">Memes (nyan, derp, lulz)</button>
+                    <button class="ab-option" data-value="events">Events (occupy, etc)</button>
+                    <button class="ab-option" data-value="none">No 2011 references</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Password guess section -->
+        <div id="guess-section">
+            <h2>Enter Your Best Guesses</h2>
+            <p>What 5 passwords do you think you might have used?</p>
+            
+            <div class="guess-inputs">
+                <input type="text" class="guess-input" id="guess1" placeholder="Most likely password...">
+                <input type="text" class="guess-input" id="guess2" placeholder="Second guess...">
+                <input type="text" class="guess-input" id="guess3" placeholder="Third guess...">
+                <input type="text" class="guess-input" id="guess4" placeholder="Fourth guess...">
+                <input type="text" class="guess-input" id="guess5" placeholder="Fifth guess...">
+            </div>
+            
+            <button id="submit-guesses">Submit Guesses</button>
+        </div>
+        
+        <!-- Results display -->
+        <div id="results-section" style="display: none;">
+            <h2>Your Profile</h2>
+            <div id="results-content"></div>
+            <button id="copy-results">Copy Results</button>
+        </div>
+    </div>
+    
+    <!-- Audio player for 2011 music -->
+    <div id="audio-controls">
+        <button id="toggle-music">Play 2011 Music</button>
+        <span id="now-playing"></span>
+    </div>
+    
+    <script src="memes.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+/* 2011 Nostalgia Site Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Neue', cursive;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Background canvas for floating memes */
+#background-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Floating memes container */
+#meme-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-meme {
+    position: absolute;
+    opacity: 0.7;
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+    75% {
+        transform: translateY(20px) rotate(-5deg);
+    }
+}
+
+/* Main content */
+#main-content {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Header */
+#header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+#header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    color: #f39c12;
+    text-shadow: 3px 3px 0 #e74c3c, 6px 6px 0 #9b59b6;
+    margin-bottom: 20px;
+    animation: rainbow 3s ease-in-out infinite;
+}
+
+@keyframes rainbow {
+    0%, 100% { color: #f39c12; }
+    25% { color: #e74c3c; }
+    50% { color: #9b59b6; }
+    75% { color: #3498db; }
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #ecf0f1;
+    margin-bottom: 10px;
+}
+
+.date-context {
+    font-size: 1.1rem;
+    color: #bdc3c7;
+    font-style: italic;
+}
+
+/* Bitcoin Wallet Prompt - mimicking 2011 Bitcoin-Qt */
+#wallet-prompt {
+    background: #f0f0f0;
+    border: 2px solid #888;
+    border-radius: 5px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    margin: 40px auto;
+    max-width: 500px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color: #000;
+}
+
+.wallet-header {
+    background: linear-gradient(180deg, #4a90d9 0%, #2e6db4 100%);
+    color: white;
+    padding: 8px 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 3px 3px 0 0;
+}
+
+.wallet-icon {
+    font-size: 18px;
+    color: #f7931a;
+}
+
+.wallet-body {
+    padding: 20px;
+}
+
+.wallet-body p {
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.wallet-body .hint {
+    color: #666;
+    font-style: italic;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.wallet-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.wallet-buttons button {
+    padding: 6px 20px;
+    border: 1px solid #888;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.wallet-buttons button:hover {
+    background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%);
+}
+
+/* Context Section */
+#context-section {
+    margin: 60px 0;
+}
+
+#context-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: #3498db;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.context-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.context-item {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: transform 0.3s, background 0.3s;
+}
+
+.context-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.15);
+}
+
+.context-item h3 {
+    color: #f39c12;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.context-item p {
+    color: #bdc3c7;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* A/B Questions Section */
+#ab-section {
+    margin: 60px 0;
+    background: rgba(0,0,0,0.3);
+    padding: 40px;
+    border-radius: 15px;
+}
+
+#ab-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: #e74c3c;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ab-intro {
+    text-align: center;
+    color: #bdc3c7;
+    margin-bottom: 30px;
+}
+
+.ab-question {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+}
+
+.question-text {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #ecf0f1;
+}
+
+.ab-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ab-option {
+    padding: 10px 20px;
+    background: rgba(52, 152, 219, 0.3);
+    border: 2px solid #3498db;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.ab-option:hover {
+    background: rgba(52, 152, 219, 0.5);
+    transform: scale(1.05);
+}
+
+.ab-option.selected {
+    background: #3498db;
+    border-color: #2ecc71;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+/* Guess Section */
+#guess-section {
+    margin: 60px 0;
+    text-align: center;
+}
+
+#guess-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: #2ecc71;
+    margin-bottom: 20px;
+}
+
+#guess-section > p {
+    color: #bdc3c7;
+    margin-bottom: 30px;
+}
+
+.guess-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto 30px;
+}
+
+.guess-input {
+    padding: 15px;
+    border: 2px solid #3498db;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+}
+
+.guess-input::placeholder {
+    color: #7f8c8d;
+}
+
+.guess-input:focus {
+    outline: none;
+    border-color: #2ecc71;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+}
+
+#submit-guesses {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#submit-guesses:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Results Section */
+#results-section {
+    margin: 60px 0;
+    padding: 40px;
+    background: rgba(46, 204, 113, 0.1);
+    border: 2px solid #2ecc71;
+    border-radius: 15px;
+}
+
+#results-section h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: #2ecc71;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#results-content {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+}
+
+#copy-results {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 30px;
+    background: #3498db;
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#copy-results:hover {
+    background: #2980b9;
+}
+
+/* Audio Controls */
+#audio-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px 20px;
+    border-radius: 30px;
+}
+
+#toggle-music {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.3s;
+}
+
+#toggle-music:hover {
+    transform: scale(1.05);
+}
+
+#toggle-music.playing {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+#now-playing {
+    color: #bdc3c7;
+    font-size: 0.8rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Nyan Cat Rainbow Trail Effect */
+.nyan-trail {
+    position: fixed;
+    height: 10px;
+    background: linear-gradient(
+        to bottom,
+        #ff0000 0%, #ff0000 16.66%,
+        #ff9900 16.66%, #ff9900 33.33%,
+        #ffff00 33.33%, #ffff00 50%,
+        #33ff00 50%, #33ff00 66.66%,
+        #0099ff 66.66%, #0099ff 83.33%,
+        #6633ff 83.33%, #6633ff 100%
+    );
+    z-index: 5;
+    pointer-events: none;
+    animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #header h1 {
+        font-size: 1.5rem;
+    }
+    
+    #wallet-prompt {
+        margin: 20px;
+    }
+    
+    .ab-options {
+        flex-direction: column;
+    }
+    
+    #audio-controls {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        justify-content: center;
+    }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a2e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3498db;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2980b9;
+}
