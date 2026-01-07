@@ -485,8 +485,8 @@
     }
     
     function generateShuffledPlaylist() {
-        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
-        shuffledPlaylist = [...Array(tracksWithAudio.length).keys()];
+        const tracks = window.MUSIC_2011 || [];
+        shuffledPlaylist = [...Array(tracks.length).keys()];
         for (let i = shuffledPlaylist.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffledPlaylist[i], shuffledPlaylist[j]] = [shuffledPlaylist[j], shuffledPlaylist[i]];
@@ -495,26 +495,26 @@
     }
     
     function getNextTrackIndex() {
-        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
-        if (tracksWithAudio.length === 0) return 0;
+        const tracks = window.MUSIC_2011 || [];
+        if (tracks.length === 0) return 0;
         
         if (shuffleMode) {
             shuffleIndex = (shuffleIndex + 1) % shuffledPlaylist.length;
             return shuffledPlaylist[shuffleIndex];
         } else {
-            return (state.currentTrackIndex + 1) % tracksWithAudio.length;
+            return (state.currentTrackIndex + 1) % tracks.length;
         }
     }
     
     function getPrevTrackIndex() {
-        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
-        if (tracksWithAudio.length === 0) return 0;
+        const tracks = window.MUSIC_2011 || [];
+        if (tracks.length === 0) return 0;
         
         if (shuffleMode) {
             shuffleIndex = (shuffleIndex - 1 + shuffledPlaylist.length) % shuffledPlaylist.length;
             return shuffledPlaylist[shuffleIndex];
         } else {
-            return (state.currentTrackIndex - 1 + tracksWithAudio.length) % tracksWithAudio.length;
+            return (state.currentTrackIndex - 1 + tracks.length) % tracks.length;
         }
     }
     
@@ -539,11 +539,16 @@
     function playMusic() {
         if (!window.MUSIC_2011 || window.MUSIC_2011.length === 0) return;
         
-        const tracksWithAudio = window.MUSIC_2011.filter(t => t.audioUrl);
+        const tracks = window.MUSIC_2011;
+        const trackIndex = state.currentTrackIndex % tracks.length;
+        const track = tracks[trackIndex];
         
-        if (tracksWithAudio.length > 0) {
-            const track = tracksWithAudio[state.currentTrackIndex % tracksWithAudio.length];
-            
+        const nowPlaying = document.getElementById('now-playing');
+        if (nowPlaying) {
+            nowPlaying.textContent = track.title;
+        }
+        
+        if (track.audioUrl) {
             if (audioPlayer) {
                 if (audioPlayer.src !== track.audioUrl) {
                     audioPlayer.src = track.audioUrl;
@@ -552,31 +557,21 @@
                     console.log('Audio autoplay blocked, user interaction required:', e);
                 });
             }
-            
-            const nowPlaying = document.getElementById('now-playing');
-            if (nowPlaying) {
-                nowPlaying.textContent = track.title;
-            }
-        } else {
-            const tracksWithYT = window.MUSIC_2011.filter(t => t.youtubeId);
-            if (tracksWithYT.length === 0) return;
-            
-            const track = tracksWithYT[state.currentTrackIndex % tracksWithYT.length];
-            
+        } else if (track.youtubeId) {
             let youtubePlayer = document.getElementById('youtube-player');
             if (!youtubePlayer) {
                 youtubePlayer = document.createElement('iframe');
                 youtubePlayer.id = 'youtube-player';
-                youtubePlayer.style.display = 'none';
-                youtubePlayer.allow = 'autoplay';
+                youtubePlayer.style.cssText = 'position:fixed;bottom:100px;right:20px;width:280px;height:158px;z-index:99;border-radius:8px;border:2px solid rgba(155,89,182,0.5);';
+                youtubePlayer.allow = 'autoplay; encrypted-media';
                 document.body.appendChild(youtubePlayer);
             }
             
-            youtubePlayer.src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&loop=1`;
+            youtubePlayer.src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&enablejsapi=1`;
+            youtubePlayer.style.display = 'block';
             
-            const nowPlaying = document.getElementById('now-playing');
-            if (nowPlaying) {
-                nowPlaying.textContent = track.title;
+            if (audioPlayer) {
+                audioPlayer.pause();
             }
         }
     }
@@ -584,6 +579,11 @@
     function pauseMusic() {
         if (audioPlayer) {
             audioPlayer.pause();
+        }
+        const youtubePlayer = document.getElementById('youtube-player');
+        if (youtubePlayer) {
+            youtubePlayer.style.display = 'none';
+            youtubePlayer.src = '';
         }
     }
     
@@ -595,6 +595,7 @@
         
         const youtubePlayer = document.getElementById('youtube-player');
         if (youtubePlayer) {
+            youtubePlayer.style.display = 'none';
             youtubePlayer.src = '';
         }
     }

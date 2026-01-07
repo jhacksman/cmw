@@ -750,46 +750,98 @@ const MEME_SOURCES = [
 // MIDI sources: bitmidi.com, freemidi.org, midiworld.com
 
 const MUSIC_2011 = [
-    // Chiptune/8-bit tracks (MIDI-style) - Free from Pixabay/FMA
-    // These are royalty-free chiptune tracks that capture the 2011 hacker vibe
+    // 2011 HIT SONGS - The actual hits from that era
+    // Using YouTube IDs for playback
     {
-        title: '8-Bit Retro Funk',
-        audioUrl: 'https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3',
-        category: 'chiptune'
+        title: 'Party Rock Anthem - LMFAO',
+        youtubeId: 'KQ6zr6kCPj8',
+        category: 'hit',
+        note: '#1 hit of 2011'
     },
     {
-        title: '8-Bit Arcade',
-        audioUrl: 'https://cdn.pixabay.com/audio/2022/10/18/audio_db74590f1f.mp3',
-        category: 'chiptune'
+        title: 'Moves Like Jagger - Maroon 5',
+        youtubeId: 'iEPTlhBmwRg',
+        category: 'hit',
+        note: 'Massive 2011 hit'
     },
     {
-        title: 'Retro Game Music',
-        audioUrl: 'https://cdn.pixabay.com/audio/2021/11/01/audio_5a40c5e7f1.mp3',
-        category: 'chiptune'
+        title: 'Rolling in the Deep - Adele',
+        youtubeId: 'rYEDA3JcQqw',
+        category: 'hit',
+        note: 'Grammy winner 2011'
     },
     {
-        title: '8-Bit Adventure',
-        audioUrl: 'https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749bf23.mp3',
-        category: 'chiptune'
+        title: 'Someone Like You - Adele',
+        youtubeId: 'hLQl3WQQoQ0',
+        category: 'hit',
+        note: 'Emotional 2011 ballad'
     },
     {
-        title: 'Pixel Dreams',
-        audioUrl: 'https://cdn.pixabay.com/audio/2022/05/16/audio_169b0c0f67.mp3',
-        category: 'chiptune'
+        title: 'Pumped Up Kicks - Foster the People',
+        youtubeId: 'SDTZ7iX4vTQ',
+        category: 'hit',
+        note: 'Indie hit of 2011'
     },
-    
-    // Fallback to YouTube for specific 2011 tracks (if chiptune not available)
     {
-        title: 'Nyan Cat (YouTube)',
-        youtubeId: 'wZZ7oFKsKzY',
+        title: 'Super Bass - Nicki Minaj',
+        youtubeId: '4JipHEz53sU',
+        category: 'hit',
+        note: '2011 summer anthem'
+    },
+    {
+        title: 'Give Me Everything - Pitbull ft. Ne-Yo',
+        youtubeId: 'EPo5wWmKEaI',
+        category: 'hit',
+        note: 'Club banger 2011'
+    },
+    {
+        title: 'Firework - Katy Perry',
+        youtubeId: 'QGJuMBdaqIw',
+        category: 'hit',
+        note: 'Late 2010/2011 hit'
+    },
+    {
+        title: 'Born This Way - Lady Gaga',
+        youtubeId: 'wV1FrqwZyKw',
+        category: 'hit',
+        note: '2011 anthem'
+    },
+    {
+        title: 'Sexy and I Know It - LMFAO',
+        youtubeId: 'wyx6JDQCslE',
+        category: 'hit',
+        note: 'Late 2011 party track'
+    },
+    // MEME SONGS from 2011
+    {
+        title: 'Nyan Cat',
+        youtubeId: 'QH2-TGUlwu4',
         category: 'meme',
         note: 'The iconic 2011 meme song'
     },
     {
-        title: 'Sandstorm - Darude (YouTube)',
+        title: 'Friday - Rebecca Black',
+        youtubeId: 'kfVsfOSbJY0',
+        category: 'meme',
+        note: 'Viral meme song March 2011'
+    },
+    {
+        title: 'Sandstorm - Darude',
         youtubeId: 'y6120QOlsfU',
         category: 'hacker',
-        note: '1999 release but huge meme in early 2010s'
+        note: 'Classic hacker/meme song'
+    },
+    {
+        title: 'Always - Erasure (Robot Unicorn Attack)',
+        youtubeId: 'eSMeUPFjQHc',
+        category: 'game',
+        note: 'Robot Unicorn Attack theme'
+    },
+    {
+        title: 'Angry Birds Theme',
+        youtubeId: 'QXYhspZ0EuM',
+        category: 'game',
+        note: '2011 gaming phenomenon'
     }
 ];
 
