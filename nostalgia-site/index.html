@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>December 2011 - Remember?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+    
+    <!-- Floating memes container - always visible behind modals -->
+    <div id="meme-container"></div>
+    
+    <!-- Minimal header - always visible -->
+    <div id="header">
+        <h1>December 2011</h1>
+        <p class="subtitle">Remember when you set that Bitcoin wallet password?</p>
+        <p class="date-context">CMU Winter Break - Your brother was home...</p>
+    </div>
+    
+    <!-- Bitcoin wallet password prompt (mimicking 2011 Bitcoin-Qt) - always visible -->
+    <div id="wallet-prompt">
+        <div class="wallet-header">
+            <span class="wallet-icon">&#8383;</span>
+            <span>Bitcoin - Encrypt Wallet</span>
+        </div>
+        <div class="wallet-body">
+            <p>Enter a passphrase to encrypt your wallet.</p>
+            <p class="hint">Use 10 or more random characters, or eight or more words.</p>
+            
+            <div class="input-group">
+                <label>New passphrase:</label>
+                <input type="password" id="passphrase1" placeholder="Enter passphrase...">
+            </div>
+            <div class="input-group">
+                <label>Repeat passphrase:</label>
+                <input type="password" id="passphrase2" placeholder="Repeat passphrase...">
+            </div>
+            
+            <div class="wallet-buttons">
+                <button id="btn-ok">OK</button>
+                <button id="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- A/B Test Modal Overlay (30% x 30% centered) - Shows one question at a time -->
+    <div id="ab-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Help Us Narrow It Down</h2>
+            <p class="modal-intro">Answer as if you were setting a password in December 2011...</p>
+            <p id="ab-progress" class="ab-progress">Question 1 of 10</p>
+            
+            <div class="ab-questions-container">
+                <!-- Question 1 -->
+                <div class="ab-question" data-question="1">
+                    <p class="question-text">Separators between words:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="space">Spaces ("this is bad")</button>
+                        <button class="ab-option" data-value="none">No separator ("thisisbad")</button>
+                        <button class="ab-option" data-value="period">Periods ("this.is.bad")</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="ab-question" data-question="2" style="display:none;">
+                    <p class="question-text">Capitalization style:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="lower">all lowercase</button>
+                        <button class="ab-option" data-value="first">First word capitalized</button>
+                        <button class="ab-option" data-value="title">Title Case Each Word</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="ab-question" data-question="3" style="display:none;">
+                    <p class="question-text">Trailing characters:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="none">None</button>
+                        <button class="ab-option" data-value="numbers">Numbers (123, 403, 2011)</button>
+                        <button class="ab-option" data-value="punctuation">Punctuation (!, ?, ~)</button>
+                        <button class="ab-option" data-value="both">Both (123!, 403?)</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="ab-question" data-question="4" style="display:none;">
+                    <p class="question-text">Leetspeak usage:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="none">No leetspeak</button>
+                        <button class="ab-option" data-value="light">Light (@ for a, $ for s)</button>
+                        <button class="ab-option" data-value="heavy">Heavy (p@$$w0rd)</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="ab-question" data-question="5" style="display:none;">
+                    <p class="question-text">Password theme:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="spite">"Spite" password (dumb/bad/stupid)</button>
+                        <button class="ab-option" data-value="phrase">Common phrase</button>
+                        <button class="ab-option" data-value="personal">Personal reference</button>
+                        <button class="ab-option" data-value="random">Random words</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 6 -->
+                <div class="ab-question" data-question="6" style="display:none;">
+                    <p class="question-text">Word count preference:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="short">Short (2-3 words)</button>
+                        <button class="ab-option" data-value="medium">Medium (4-5 words)</button>
+                        <button class="ab-option" data-value="long">Long (6-8 words)</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 7 -->
+                <div class="ab-question" data-question="7" style="display:none;">
+                    <p class="question-text">Character length target:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="minimum">Minimum (exactly 10 chars)</button>
+                        <button class="ab-option" data-value="comfortable">Comfortable (12-16 chars)</button>
+                        <button class="ab-option" data-value="long">Long (17+ chars)</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 8 -->
+                <div class="ab-question" data-question="8" style="display:none;">
+                    <p class="question-text">Potato/poop references:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="yes">Likely included</button>
+                        <button class="ab-option" data-value="no">Probably not</button>
+                        <button class="ab-option" data-value="maybe">Maybe elongated (pooooop)</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 9 -->
+                <div class="ab-question" data-question="9" style="display:none;">
+                    <p class="question-text">"X is hard" pattern (like "tables are hard"):</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="yes">Sounds like something I'd use</button>
+                        <button class="ab-option" data-value="no">Not my style</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+                
+                <!-- Question 10 -->
+                <div class="ab-question" data-question="10" style="display:none;">
+                    <p class="question-text">2011 references:</p>
+                    <div class="ab-options">
+                        <button class="ab-option" data-value="bitcoin">Bitcoin-related</button>
+                        <button class="ab-option" data-value="memes">Memes (nyan, derp, lulz)</button>
+                        <button class="ab-option" data-value="events">Events (occupy, etc)</button>
+                        <button class="ab-option" data-value="none">No 2011 references</button>
+                        <button class="ab-option idk-btn" data-value="idk">IDK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Guess Modal Overlay (30% x 30% centered) -->
+    <div id="guess-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>Enter Your Best Guesses</h2>
+            <p class="modal-intro">What 5 passwords do you think you might have used?</p>
+            
+            <div class="guess-inputs">
+                <input type="text" class="guess-input" id="guess1" placeholder="Most likely password...">
+                <input type="text" class="guess-input" id="guess2" placeholder="Second guess...">
+                <input type="text" class="guess-input" id="guess3" placeholder="Third guess...">
+                <input type="text" class="guess-input" id="guess4" placeholder="Fourth guess...">
+                <input type="text" class="guess-input" id="guess5" placeholder="Fifth guess...">
+            </div>
+            
+            <button id="submit-guesses" class="submit-btn">Submit Guesses</button>
+            
+            <!-- Results display -->
+            <div id="results-section" style="display: none;">
+                <h3>Your Profile</h3>
+                <div id="results-content"></div>
+                <button id="copy-results" class="copy-btn">Copy Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Modal Overlay (30% x 30% centered) -->
+    <div id="games-modal" class="modal-overlay">
+        <div class="modal-content games-modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>2011 Browser Games</h2>
+            <p class="modal-intro">"Always" by Erasure - The Robot Unicorn Attack anthem</p>
+            
+            <!-- Robot Unicorn Attack playthrough video -->
+            <div class="video-container">
+                <iframe 
+                    id="game-video"
+                    width="100%" 
+                    height="250" 
+                    src="" 
+                    title="Robot Unicorn Attack Gameplay" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="game-links">
+                <a href="https://www.crazygames.com/game/robot-unicorn-attack" target="_blank" class="game-link">
+                    Play Robot Unicorn Attack
+                </a>
+                <a href="https://poki.com/en/g/qwop" target="_blank" class="game-link qwop-link">
+                    Play QWOP
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav">
+        <button id="nav-ab" class="nav-btn">A/B Test</button>
+        <button id="nav-guess" class="nav-btn">Guess Password</button>
+        <button id="nav-games" class="nav-btn">Play Games</button>
+    </div>
+    
+    <!-- Audio player for 2011 music - Full controls -->
+    <div id="audio-controls">
+        <div class="player-track-info">
+            <span id="now-playing">8-Bit Music</span>
+        </div>
+        <div class="player-buttons">
+            <button id="btn-prev" class="player-btn" title="Previous Track">&#9198;</button>
+            <button id="toggle-music" class="player-btn play-btn" title="Play/Pause">&#9654;</button>
+            <button id="btn-next" class="player-btn" title="Next Track">&#9197;</button>
+            <button id="btn-shuffle" class="player-btn" title="Shuffle">&#128256;</button>
+        </div>
+        <div class="player-seek">
+            <span id="current-time">0:00</span>
+            <input type="range" id="seek-bar" min="0" max="100" value="0">
+            <span id="duration">0:00</span>
+        </div>
+    </div>
+    
+    <script src="memes.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
