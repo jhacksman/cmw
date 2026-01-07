@@ -15,13 +15,15 @@
     // ============================================
     const state = {
         sessionId: localStorage.getItem('nostalgia_session_id') || null,
-        abAnswers: {},
+        abAnswers: JSON.parse(localStorage.getItem('nostalgia_ab_answers') || '{}'),
         passwordGuesses: [],
         currentView: 'main', // 'main', 'ab', 'guess', 'games'
         musicPlaying: false,
         currentTrackIndex: 0,
         floatingElements: [],
-        timelineIndex: 0
+        timelineIndex: 0,
+        currentABQuestion: parseInt(localStorage.getItem('nostalgia_ab_question') || '1'),
+        totalABQuestions: 10
     };
 
     // ============================================
@@ -227,10 +229,13 @@
     }
 
     // ============================================
-    // A/B QUESTION HANDLING
+    // A/B QUESTION HANDLING (One question at a time)
     // ============================================
     function initABQuestions() {
         const abOptions = document.querySelectorAll('.ab-option');
+        
+        // Show the current question and update progress
+        showCurrentABQuestion();
         
         abOptions.forEach(option => {
             option.addEventListener('click', function() {
@@ -248,6 +253,7 @@
                 
                 // Store answer
                 state.abAnswers[questionNum] = value;
+                localStorage.setItem('nostalgia_ab_answers', JSON.stringify(state.abAnswers));
                 
                 // Visual feedback
                 this.style.transform = 'scale(1.1)';
@@ -259,8 +265,51 @@
                 
                 // Save to backend
                 saveABAnswers();
+                
+                // Auto-advance to next question after a short delay
+                setTimeout(() => {
+                    advanceABQuestion();
+                }, 500);
             });
         });
+    }
+    
+    function showCurrentABQuestion() {
+        const questions = document.querySelectorAll('.ab-question');
+        const progress = document.getElementById('ab-progress');
+        
+        questions.forEach((q, index) => {
+            const qNum = parseInt(q.dataset.question);
+            if (qNum === state.currentABQuestion) {
+                q.style.display = 'block';
+                // Restore previous selection if any
+                const prevAnswer = state.abAnswers[qNum];
+                if (prevAnswer) {
+                    q.querySelectorAll('.ab-option').forEach(opt => {
+                        if (opt.dataset.value === prevAnswer) {
+                            opt.classList.add('selected');
+                        }
+                    });
+                }
+            } else {
+                q.style.display = 'none';
+            }
+        });
+        
+        if (progress) {
+            progress.textContent = `Question ${state.currentABQuestion} of ${state.totalABQuestions}`;
+        }
+    }
+    
+    function advanceABQuestion() {
+        // Move to next question (cycle back to 1 after 10)
+        state.currentABQuestion = (state.currentABQuestion % state.totalABQuestions) + 1;
+        localStorage.setItem('nostalgia_ab_question', state.currentABQuestion.toString());
+        
+        showCurrentABQuestion();
+        
+        // Close modal after completing all questions (optional - user can keep cycling)
+        // For now, just show the next question
     }
 
     // ============================================
@@ -332,15 +381,28 @@
     }
 
     // ============================================
-    // MUSIC PLAYER (YouTube embeds)
+    // MUSIC PLAYER (Chiptune/8-bit audio - MIDI style)
     // ============================================
-    let youtubePlayer = null;
+    let audioPlayer = null;
     
     function initMusicPlayer() {
         const toggleBtn = document.getElementById('toggle-music');
         const nowPlaying = document.getElementById('now-playing');
         
         if (!toggleBtn) return;
+        
+        // Create audio element
+        audioPlayer = new Audio();
+        audioPlayer.loop = true;
+        audioPlayer.volume = 0.5;
+        
+        // Auto-advance to next track when current ends (if not looping)
+        audioPlayer.addEventListener('ended', () => {
+            state.currentTrackIndex++;
+            if (state.musicPlaying) {
+                playMusic();
+            }
+        });
         
         toggleBtn.addEventListener('click', function() {
             if (state.musicPlaying) {
@@ -360,30 +422,57 @@
     function playMusic() {
         if (!window.MUSIC_2011 || window.MUSIC_2011.length === 0) return;
         
-        // Find a track with a YouTube ID
-        const tracksWithYT = window.MUSIC_2011.filter(t => t.youtubeId);
-        if (tracksWithYT.length === 0) return;
+        // Prefer tracks with audioUrl (chiptune/MIDI-style), fallback to YouTube
+        const tracksWithAudio = window.MUSIC_2011.filter(t => t.audioUrl);
         
-        const track = tracksWithYT[state.currentTrackIndex % tracksWithYT.length];
-        
-        // Create hidden YouTube iframe for audio
-        if (!youtubePlayer) {
-            youtubePlayer = document.createElement('iframe');
-            youtubePlayer.id = 'youtube-player';
-            youtubePlayer.style.display = 'none';
-            youtubePlayer.allow = 'autoplay';
-            document.body.appendChild(youtubePlayer);
-        }
-        
-        youtubePlayer.src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&loop=1`;
-        
-        const nowPlaying = document.getElementById('now-playing');
-        if (nowPlaying) {
-            nowPlaying.textContent = track.title;
+        if (tracksWithAudio.length > 0) {
+            // Play chiptune audio
+            const track = tracksWithAudio[state.currentTrackIndex % tracksWithAudio.length];
+            
+            if (audioPlayer) {
+                audioPlayer.src = track.audioUrl;
+                audioPlayer.play().catch(e => {
+                    console.log('Audio autoplay blocked, user interaction required:', e);
+                });
+            }
+            
+            const nowPlaying = document.getElementById('now-playing');
+            if (nowPlaying) {
+                nowPlaying.textContent = track.title + ' (8-bit)';
+            }
+        } else {
+            // Fallback to YouTube if no audio tracks
+            const tracksWithYT = window.MUSIC_2011.filter(t => t.youtubeId);
+            if (tracksWithYT.length === 0) return;
+            
+            const track = tracksWithYT[state.currentTrackIndex % tracksWithYT.length];
+            
+            // Create hidden YouTube iframe for audio
+            let youtubePlayer = document.getElementById('youtube-player');
+            if (!youtubePlayer) {
+                youtubePlayer = document.createElement('iframe');
+                youtubePlayer.id = 'youtube-player';
+                youtubePlayer.style.display = 'none';
+                youtubePlayer.allow = 'autoplay';
+                document.body.appendChild(youtubePlayer);
+            }
+            
+            youtubePlayer.src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&loop=1`;
+            
+            const nowPlaying = document.getElementById('now-playing');
+            if (nowPlaying) {
+                nowPlaying.textContent = track.title;
+            }
         }
     }
     
     function stopMusic() {
+        if (audioPlayer) {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
+        
+        const youtubePlayer = document.getElementById('youtube-player');
         if (youtubePlayer) {
             youtubePlayer.src = '';
         }

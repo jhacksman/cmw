@@ -423,6 +423,31 @@ body {
     box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
 }
 
+/* IDK Button - distinct styling */
+.ab-option.idk-btn {
+    background: rgba(149, 165, 166, 0.3);
+    border-color: #95a5a6;
+    color: #bdc3c7;
+}
+
+.ab-option.idk-btn:hover {
+    background: rgba(149, 165, 166, 0.5);
+}
+
+.ab-option.idk-btn.selected {
+    background: #95a5a6;
+    border-color: #7f8c8d;
+}
+
+/* A/B Progress Indicator */
+.ab-progress {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #f39c12;
+    margin-bottom: 20px;
+    font-family: 'Press Start 2P', cursive;
+}
+
 /* Guess Section */
 #guess-section {
     margin: 60px 0;

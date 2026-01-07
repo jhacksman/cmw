@@ -10,6 +10,154 @@
 // Act 4: December - The Ports & Winter Break
 
 const TIMELINE_2011 = [
+    // === EARLIER 2011 - SECURITY & WIKILEAKS CONTEXT ===
+    {
+        id: 100,
+        date: '2011-02-06',
+        month: 'february',
+        act: 0,
+        title: 'ANONYMOUS HACKS HBGARY FEDERAL',
+        text: 'CEO Aaron Barr exposed after threatening to unmask Anonymous',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'Ars Technica'
+    },
+    {
+        id: 101,
+        date: '2011-03-17',
+        month: 'march',
+        act: 0,
+        title: 'RSA SECURID BREACH',
+        text: 'APT attack compromises SecurID tokens - leads to Lockheed Martin breach',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'RSA Security'
+    },
+    {
+        id: 102,
+        date: '2011-04-20',
+        month: 'april',
+        act: 0,
+        title: 'PSN HACK - 77M ACCOUNTS',
+        text: 'PlayStation Network breached, largest gaming data breach ever',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'Sony'
+    },
+    {
+        id: 103,
+        date: '2011-05-07',
+        month: 'may',
+        act: 0,
+        title: 'LULZSEC FORMS',
+        text: '"Laughing at your security since 2011" - 50 days of lulz begins',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'LulzSec Twitter'
+    },
+    {
+        id: 104,
+        date: '2011-06-02',
+        month: 'june',
+        act: 0,
+        title: 'LULZSEC HACKS PBS',
+        text: 'Posts fake story: "Tupac alive in New Zealand"',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'PBS'
+    },
+    {
+        id: 105,
+        date: '2011-06-15',
+        month: 'june',
+        act: 0,
+        title: 'LULZSEC HACKS CIA WEBSITE',
+        text: 'CIA.gov taken down via DDoS',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'Various'
+    },
+    {
+        id: 106,
+        date: '2011-06-26',
+        month: 'june',
+        act: 0,
+        title: 'LULZSEC DISBANDS',
+        text: '"50 Days of Lulz" ends - "our planned 50 day cruise has expired"',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'LulzSec'
+    },
+    {
+        id: 107,
+        date: '2011-08-29',
+        month: 'august',
+        act: 0,
+        title: 'DIGINOTAR BREACH REVEALED',
+        text: 'Dutch CA compromised - fake Google SSL certs issued',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'Google Security'
+    },
+    
+    // === WIKILEAKS 2011 ===
+    {
+        id: 110,
+        date: '2011-01-17',
+        month: 'january',
+        act: 0,
+        title: 'WIKILEAKS BANKING BLOCKADE',
+        text: 'Visa, Mastercard, PayPal continue blocking donations',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'WikiLeaks'
+    },
+    {
+        id: 111,
+        date: '2011-02-23',
+        month: 'february',
+        act: 0,
+        title: 'BRADLEY MANNING CHARGES',
+        text: '22 additional charges including "aiding the enemy"',
+        type: 'headline',
+        location: 'USA',
+        mood: 'hacker',
+        source: 'US Army'
+    },
+    {
+        id: 112,
+        date: '2011-08-30',
+        month: 'august',
+        act: 0,
+        title: 'CABLEGATE FULL RELEASE',
+        text: 'All 251,287 unredacted cables published',
+        type: 'headline',
+        location: 'Internet',
+        mood: 'hacker',
+        source: 'WikiLeaks'
+    },
+    {
+        id: 113,
+        date: '2011-11-02',
+        month: 'november',
+        act: 0,
+        title: 'ASSANGE LOSES EXTRADITION APPEAL',
+        text: 'UK court rules extradition to Sweden can proceed',
+        type: 'headline',
+        location: 'UK',
+        mood: 'hacker',
+        source: 'BBC News'
+    },
+    
     // === ACT 1: SEPTEMBER - THE SPARK ===
     {
         id: 1,
@@ -602,71 +750,46 @@ const MEME_SOURCES = [
 // MIDI sources: bitmidi.com, freemidi.org, midiworld.com
 
 const MUSIC_2011 = [
-    // 2011 Pop Hits
+    // Chiptune/8-bit tracks (MIDI-style) - Free from Pixabay/FMA
+    // These are royalty-free chiptune tracks that capture the 2011 hacker vibe
     {
-        title: 'Party Rock Anthem - LMFAO',
-        youtubeId: 'KQ6zr6kCPj8',
-        midiUrl: 'https://bitmidi.com/uploads/69296.mid',
-        category: 'pop'
+        title: '8-Bit Retro Funk',
+        audioUrl: 'https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a73467.mp3',
+        category: 'chiptune'
     },
     {
-        title: 'Rolling in the Deep - Adele',
-        youtubeId: 'rYEDA3JcQqw',
-        category: 'pop'
+        title: '8-Bit Arcade',
+        audioUrl: 'https://cdn.pixabay.com/audio/2022/10/18/audio_db74590f1f.mp3',
+        category: 'chiptune'
     },
     {
-        title: 'Moves Like Jagger - Maroon 5',
-        youtubeId: 'iEPTlhBmwRg',
-        category: 'pop'
+        title: 'Retro Game Music',
+        audioUrl: 'https://cdn.pixabay.com/audio/2021/11/01/audio_5a40c5e7f1.mp3',
+        category: 'chiptune'
     },
     {
-        title: 'Nyan Cat',
+        title: '8-Bit Adventure',
+        audioUrl: 'https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749bf23.mp3',
+        category: 'chiptune'
+    },
+    {
+        title: 'Pixel Dreams',
+        audioUrl: 'https://cdn.pixabay.com/audio/2022/05/16/audio_169b0c0f67.mp3',
+        category: 'chiptune'
+    },
+    
+    // Fallback to YouTube for specific 2011 tracks (if chiptune not available)
+    {
+        title: 'Nyan Cat (YouTube)',
         youtubeId: 'wZZ7oFKsKzY',
-        category: 'meme'
+        category: 'meme',
+        note: 'The iconic 2011 meme song'
     },
     {
-        title: 'Angry Birds Theme - Ari Pulkkinen',
-        youtubeId: '6DYJXSSgW08',
-        category: 'game',
-        note: 'Iconic 2011 mobile game theme'
-    },
-    
-    // Hacker/Infosec Culture Music
-    {
-        title: 'Sandstorm - Darude',
+        title: 'Sandstorm - Darude (YouTube)',
         youtubeId: 'y6120QOlsfU',
-        midiUrl: 'https://freemidi.org/download3-7791-sandstorm-darude',
         category: 'hacker',
-        note: '1999 release but huge meme in early 2010s - "song name?" trolling'
-    },
-    {
-        title: 'Hacker Music - ytcracker',
-        youtubeId: 'NL0yFE0v6VI',
-        category: 'nerdcore',
-        note: 'DEF CON 19 performer, nerdcore pioneer'
-    },
-    {
-        title: 'The Link - ytcracker',
-        youtubeId: 'L41cCGnnjiw',
-        category: 'nerdcore',
-        note: 'Classic nerdcore track'
-    },
-    {
-        title: 'Dual Core - All The Things',
-        category: 'nerdcore',
-        note: 'Nerdcore duo - "My Girlfriend\'s a Hacker"'
-    },
-    {
-        title: 'MC Frontalot',
-        category: 'nerdcore',
-        note: 'Godfather of nerdcore hip-hop'
-    },
-    
-    // Chiptune / 8-bit (DEF CON vibes)
-    {
-        title: 'Chiptune/8-bit music',
-        category: 'chiptune',
-        note: 'Game Boy, NES era sounds - popular at hacker cons'
+        note: '1999 release but huge meme in early 2010s'
     }
 ];
 
