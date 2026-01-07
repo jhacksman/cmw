@@ -382,55 +382,172 @@
 
     // ============================================
     // MUSIC PLAYER (Chiptune/8-bit audio - MIDI style)
+    // Full controls: seek, next, previous, shuffle
     // ============================================
     let audioPlayer = null;
+    let shuffleMode = false;
+    let shuffledPlaylist = [];
+    let shuffleIndex = 0;
     
     function initMusicPlayer() {
         const toggleBtn = document.getElementById('toggle-music');
         const nowPlaying = document.getElementById('now-playing');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnShuffle = document.getElementById('btn-shuffle');
+        const seekBar = document.getElementById('seek-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
         
         if (!toggleBtn) return;
         
         // Create audio element
         audioPlayer = new Audio();
-        audioPlayer.loop = true;
+        audioPlayer.loop = false;
         audioPlayer.volume = 0.5;
         
-        // Auto-advance to next track when current ends (if not looping)
-        audioPlayer.addEventListener('ended', () => {
-            state.currentTrackIndex++;
-            if (state.musicPlaying) {
-                playMusic();
+        // Update seek bar and time display as track plays
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                if (seekBar) seekBar.value = percent;
+                if (currentTimeEl) currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
             }
         });
         
+        // Update duration when metadata loads
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            if (durationEl) durationEl.textContent = formatTime(audioPlayer.duration);
+            if (seekBar) seekBar.value = 0;
+            if (currentTimeEl) currentTimeEl.textContent = '0:00';
+        });
+        
+        // Auto-advance to next track when current ends
+        audioPlayer.addEventListener('ended', () => {
+            nextTrack();
+        });
+        
+        // Seek bar interaction
+        if (seekBar) {
+            seekBar.addEventListener('input', () => {
+                if (audioPlayer.duration) {
+                    const seekTime = (seekBar.value / 100) * audioPlayer.duration;
+                    audioPlayer.currentTime = seekTime;
+                }
+            });
+        }
+        
+        // Play/Pause toggle
         toggleBtn.addEventListener('click', function() {
             if (state.musicPlaying) {
-                stopMusic();
-                this.textContent = 'Play 2011 Music';
+                pauseMusic();
+                this.innerHTML = '&#9654;';
                 this.classList.remove('playing');
-                nowPlaying.textContent = '';
             } else {
                 playMusic();
-                this.textContent = 'Stop Music';
+                this.innerHTML = '&#9208;';
                 this.classList.add('playing');
             }
             state.musicPlaying = !state.musicPlaying;
         });
+        
+        // Previous track
+        if (btnPrev) {
+            btnPrev.addEventListener('click', () => {
+                prevTrack();
+            });
+        }
+        
+        // Next track
+        if (btnNext) {
+            btnNext.addEventListener('click', () => {
+                nextTrack();
+            });
+        }
+        
+        // Shuffle toggle
+        if (btnShuffle) {
+            btnShuffle.addEventListener('click', () => {
+                shuffleMode = !shuffleMode;
+                btnShuffle.classList.toggle('active', shuffleMode);
+                if (shuffleMode) {
+                    generateShuffledPlaylist();
+                }
+            });
+        }
+    }
+    
+    function formatTime(seconds) {
+        if (!seconds || isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    function generateShuffledPlaylist() {
+        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
+        shuffledPlaylist = [...Array(tracksWithAudio.length).keys()];
+        for (let i = shuffledPlaylist.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledPlaylist[i], shuffledPlaylist[j]] = [shuffledPlaylist[j], shuffledPlaylist[i]];
+        }
+        shuffleIndex = 0;
+    }
+    
+    function getNextTrackIndex() {
+        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
+        if (tracksWithAudio.length === 0) return 0;
+        
+        if (shuffleMode) {
+            shuffleIndex = (shuffleIndex + 1) % shuffledPlaylist.length;
+            return shuffledPlaylist[shuffleIndex];
+        } else {
+            return (state.currentTrackIndex + 1) % tracksWithAudio.length;
+        }
+    }
+    
+    function getPrevTrackIndex() {
+        const tracksWithAudio = window.MUSIC_2011 ? window.MUSIC_2011.filter(t => t.audioUrl) : [];
+        if (tracksWithAudio.length === 0) return 0;
+        
+        if (shuffleMode) {
+            shuffleIndex = (shuffleIndex - 1 + shuffledPlaylist.length) % shuffledPlaylist.length;
+            return shuffledPlaylist[shuffleIndex];
+        } else {
+            return (state.currentTrackIndex - 1 + tracksWithAudio.length) % tracksWithAudio.length;
+        }
+    }
+    
+    function nextTrack() {
+        state.currentTrackIndex = getNextTrackIndex();
+        if (state.musicPlaying) {
+            playMusic();
+        }
+    }
+    
+    function prevTrack() {
+        if (audioPlayer && audioPlayer.currentTime > 3) {
+            audioPlayer.currentTime = 0;
+        } else {
+            state.currentTrackIndex = getPrevTrackIndex();
+            if (state.musicPlaying) {
+                playMusic();
+            }
+        }
     }
     
     function playMusic() {
         if (!window.MUSIC_2011 || window.MUSIC_2011.length === 0) return;
         
-        // Prefer tracks with audioUrl (chiptune/MIDI-style), fallback to YouTube
         const tracksWithAudio = window.MUSIC_2011.filter(t => t.audioUrl);
         
         if (tracksWithAudio.length > 0) {
-            // Play chiptune audio
             const track = tracksWithAudio[state.currentTrackIndex % tracksWithAudio.length];
             
             if (audioPlayer) {
-                audioPlayer.src = track.audioUrl;
+                if (audioPlayer.src !== track.audioUrl) {
+                    audioPlayer.src = track.audioUrl;
+                }
                 audioPlayer.play().catch(e => {
                     console.log('Audio autoplay blocked, user interaction required:', e);
                 });
@@ -438,16 +555,14 @@
             
             const nowPlaying = document.getElementById('now-playing');
             if (nowPlaying) {
-                nowPlaying.textContent = track.title + ' (8-bit)';
+                nowPlaying.textContent = track.title;
             }
         } else {
-            // Fallback to YouTube if no audio tracks
             const tracksWithYT = window.MUSIC_2011.filter(t => t.youtubeId);
             if (tracksWithYT.length === 0) return;
             
             const track = tracksWithYT[state.currentTrackIndex % tracksWithYT.length];
             
-            // Create hidden YouTube iframe for audio
             let youtubePlayer = document.getElementById('youtube-player');
             if (!youtubePlayer) {
                 youtubePlayer = document.createElement('iframe');
@@ -463,6 +578,12 @@
             if (nowPlaying) {
                 nowPlaying.textContent = track.title;
             }
+        }
+    }
+    
+    function pauseMusic() {
+        if (audioPlayer) {
+            audioPlayer.pause();
         }
     }
     

@@ -235,10 +235,22 @@
         <button id="nav-games" class="nav-btn">Play Games</button>
     </div>
     
-    <!-- Audio player for 2011 music -->
+    <!-- Audio player for 2011 music - Full controls -->
     <div id="audio-controls">
-        <button id="toggle-music">Play 2011 Music</button>
-        <span id="now-playing"></span>
+        <div class="player-track-info">
+            <span id="now-playing">8-Bit Music</span>
+        </div>
+        <div class="player-buttons">
+            <button id="btn-prev" class="player-btn" title="Previous Track">&#9198;</button>
+            <button id="toggle-music" class="player-btn play-btn" title="Play/Pause">&#9654;</button>
+            <button id="btn-next" class="player-btn" title="Next Track">&#9197;</button>
+            <button id="btn-shuffle" class="player-btn" title="Shuffle">&#128256;</button>
+        </div>
+        <div class="player-seek">
+            <span id="current-time">0:00</span>
+            <input type="range" id="seek-bar" min="0" max="100" value="0">
+            <span id="duration">0:00</span>
+        </div>
     </div>
     
     <script src="memes.js"></script>
