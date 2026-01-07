@@ -43,9 +43,17 @@ This attempt removes words NOT in Dean's lexicon and focuses on his actual vocab
 
 ## Candidate Count
 
+### generate_refined.py (~2.8B)
 - Base patterns: 196,560 (65,520 each for 6/7/8 word)
 - Trailing variants: 14,041
 - **Total: 2,759,898,960 (~2.8B)**
+
+### generate_repeated.py (~131M)
+Repeated word patterns like "bad bad bad bad password" or "very very very very bad password"
+
+- Repeated spite: 5 word counts * 13 spite * 9 nouns * 2 case * 14,041 trailing = ~16M
+- Repeated filler + spite: 5 word counts * 7 fillers * 13 spite * 9 nouns * 2 case * 14,041 trailing = ~115M
+- **Total: ~131 million**
 
 ## Usage
 
@@ -65,7 +73,8 @@ At ~40k H/s per GPU (Bitcoin wallet mode 11300):
 
 ## Files
 
-- `generate_refined.py` - Main generator script
+- `generate_refined.py` - Main generator script (~2.8B candidates)
+- `generate_repeated.py` - Repeated word patterns (~131M candidates)
 - `RESEARCH_REPORT.md` - Detailed vocabulary research and methodology
 - `run_attempt.sh` - Shell script to run with hashcat
 - `README.md` - This file
