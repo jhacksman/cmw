@@ -163,10 +163,13 @@ def generate_all() -> Generator[str, None, None]:
     """Generate all password candidates."""
     base_phrases = generate_base_phrases()
     trailing_combos = generate_trailing_combinations()
-    separators = [" ", "."]
+    # Separators: no space, space, period
+    separators = ["", " ", "."]
     case_variants = [False, True]
     # Leet variants: none, numbers (4/5), symbols (@/$)
     leet_variants = [None, "numbers", "symbols"]
+    # Trailing separators: none, space, period
+    trailing_seps = ["", " ", "."]
     
     for words, noun_type in base_phrases:
         for sep in separators:
@@ -184,7 +187,7 @@ def generate_all() -> Generator[str, None, None]:
                     
                     for trailing in trailing_combos:
                         if trailing:
-                            for trail_sep in ["", sep]:
+                            for trail_sep in trailing_seps:
                                 yield f"{leeted_phrase}{trail_sep}{trailing}"
                         else:
                             yield leeted_phrase
@@ -194,10 +197,11 @@ def count_candidates() -> int:
     """Calculate total candidate count."""
     base_phrases = generate_base_phrases()
     trailing_combos = generate_trailing_combinations()
-    trailing_with_sep = 1 + (len(trailing_combos) - 1) * 2
+    # trailing_with_sep: 1 (no trailing) + (trailing_combos - 1) * 3 (none/space/period)
+    trailing_with_sep = 1 + (len(trailing_combos) - 1) * 3
     
-    # separators * case * leet_variants * trailing
-    total = len(base_phrases) * 2 * 2 * 3 * trailing_with_sep
+    # separators (3: none/space/period) * case (2) * leet_variants (3) * trailing
+    total = len(base_phrases) * 3 * 2 * 3 * trailing_with_sep
     
     return total
 
