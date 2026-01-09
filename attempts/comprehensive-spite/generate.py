@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive Spite Password Generator
+Comprehensive Spite Password Generator (~3B candidates)
 
 Combines all untried structures:
 1. "this password/passphrase is [intensifier(s)] [spite]" (new structure)
@@ -8,9 +8,12 @@ Combines all untried structures:
 3. "[spite] password/passphrase" (short)
 4. "Enter a passphrase..." variants
 
+Plus digit suffixes (0-999) to reach ~3B candidates.
+
 Intensifiers: very, really, super (single, double, triple, quad)
 Spite: bad, dumb
 Trailing: 0-6 chars from !?~` (mixed, for more coverage)
+Digit suffix: none, 0-9, 00-99, 000-999
 """
 
 import itertools
@@ -38,6 +41,9 @@ PASSPHRASE_VARIANTS = [
 # Trailing chars
 TRAILING_CHARS = "!?~`"
 MAX_TRAILING = 6
+
+# Digit suffixes: none, 0-9, 00-99, 000-249 (gives ~3B total)
+DIGIT_SUFFIXES = [""] + [str(i) for i in range(10)] + [f"{i:02d}" for i in range(100)] + [f"{i:03d}" for i in range(250)]
 
 
 def generate_trailing_combinations() -> List[str]:
@@ -182,15 +188,21 @@ def generate_all() -> Generator[str, None, None]:
                     for trailing in trailing_combos:
                         if trailing:
                             for trail_sep in ["", sep]:
-                                yield f"{phrase}{trail_sep}{trailing}"
+                                base = f"{phrase}{trail_sep}{trailing}"
+                                # Add digit suffixes
+                                for digit in DIGIT_SUFFIXES:
+                                    yield f"{base}{digit}"
                         else:
-                            yield phrase
+                            # No trailing - add digit suffixes directly
+                            for digit in DIGIT_SUFFIXES:
+                                yield f"{phrase}{digit}"
 
 
 def count_candidates() -> int:
     """Calculate total candidate count."""
     base_phrases = generate_base_phrases()
     trailing_combos = generate_trailing_combinations()
+    digit_count = len(DIGIT_SUFFIXES)
     trailing_with_sep = 1 + (len(trailing_combos) - 1) * 2
     
     total = 0
@@ -198,7 +210,8 @@ def count_candidates() -> int:
         noun_count = len(get_noun_variants(noun_type))
         if noun_count == 0:
             noun_count = 1
-        total += 2 * 2 * noun_count * trailing_with_sep
+        # separators * case * nouns * trailing * digits
+        total += 2 * 2 * noun_count * trailing_with_sep * digit_count
     
     return total
 
