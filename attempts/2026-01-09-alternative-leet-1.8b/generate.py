@@ -1,26 +1,192 @@
 #!/usr/bin/env python3
 """
 Alternative Leetspeak & Hybrid Pattern Generator - 8 Hypothesis Families
-~20M candidates addressing alternative mutation patterns
+~1.78B candidates with intelligent trailing brute force
 
 Execution order:
-  Tier 1 (High Priority): Families 1, 2, 3 (~18.5M)
-  Tier 2 (Medium Priority): Families 4, 5, 6 (~1.3M)
-  Tier 3 (Low Priority): Families 7, 8 (~200K)
+  Tier 1 (High Priority): Families 1, 2, 3 (~1.64B)
+  Tier 2 (Medium Priority): Families 4, 5, 6 (~115M)
+  Tier 3 (Low Priority): Families 7, 8 (~18M)
 
-Total: ~20M candidates, ~1.2 minutes at 270k H/s
+Total: ~1.78B candidates, ~1.8 hours at 270k H/s
+Intelligent trailing patterns: 1155 (vs 13 original)
 """
 
 import itertools
 import sys
 from typing import Generator, List
 
-# Dean's exact trailing pattern
-DEAN_TRAILING = [""] + ["!", "?", "~", "`"] + ["!!!", "???", "~~~", "```"] + ["!!!!!!", "??????", "~~~~~~", "``````"]
-
 # Common data
 ADJECTIVES = ["bad", "dumb", "stupid"]
 NOUNS = ["password", "passphrase"]
+
+
+def generate_intelligent_trailing() -> List[str]:
+    """
+    Generate intelligent trailing patterns based on Dean's patterns.
+
+    Dean said: "Likely 1, 3, maybe 6, exclamations or question marks
+    sometimes tildes or back ticks"
+
+    This expands to ~800 trailing options to reach 1B candidates:
+    - Single chars: !?~`1234567890
+    - Repeated patterns: !!, !!!, !!!!, etc.
+    - Mixed patterns: !?, !~, 123, 2011, etc.
+    - Common suffixes Dean might use
+    """
+    trailing = set()
+
+    # Empty (no trailing)
+    trailing.add("")
+
+    # Dean's confirmed single chars (1 char)
+    single_chars = "!?~`"
+    for c in single_chars:
+        trailing.add(c)
+
+    # Digits (1 char)
+    for d in "123456789":
+        trailing.add(d)
+
+    # Two-char patterns
+    # Repeated punctuation
+    for c in single_chars:
+        trailing.add(c * 2)
+
+    # Mixed punctuation (common patterns)
+    trailing.add("!?")
+    trailing.add("?!")
+    trailing.add("!~")
+    trailing.add("~!")
+    trailing.add("!`")
+    trailing.add("`!")
+    trailing.add("?~")
+    trailing.add("~?")
+
+    # Two digits (all combinations 10-99)
+    for d1 in "123456789":
+        for d2 in "0123456789":
+            trailing.add(d1 + d2)
+
+    # Special two-digit patterns
+    trailing.add("00")
+    trailing.add("01")
+    trailing.add("02")
+
+    # Punctuation + digit (all combinations)
+    for c in single_chars:
+        for d in "0123456789":
+            trailing.add(c + d)
+            trailing.add(d + c)
+
+    # Three-char patterns
+    # Repeated punctuation (Dean's exact pattern)
+    for c in single_chars:
+        trailing.add(c * 3)
+
+    # Three-digit patterns (common and sequential)
+    # Common patterns
+    trailing.add("123")
+    trailing.add("111")
+    trailing.add("222")
+    trailing.add("333")
+    trailing.add("444")
+    trailing.add("555")
+    trailing.add("666")
+    trailing.add("777")
+    trailing.add("888")
+    trailing.add("999")
+    trailing.add("000")
+    trailing.add("321")
+    trailing.add("456")
+    trailing.add("789")
+    trailing.add("100")
+    trailing.add("200")
+    trailing.add("500")
+
+    # All 3-digit combinations 100-999 (adds 900 patterns)
+    for h in "123456789":
+        for t in "0123456789":
+            for o in "0123456789":
+                trailing.add(h + t + o)
+
+    # Mixed patterns (3 chars)
+    trailing.add("!?!")
+    trailing.add("?!?")
+    trailing.add("!~!")
+    trailing.add("~!~")
+    trailing.add("!!!")
+    trailing.add("!1!")
+    trailing.add("1!1")
+    trailing.add("?2?")
+    trailing.add("2?2")
+
+    # Four-char patterns
+    # Repeated punctuation
+    for c in single_chars:
+        trailing.add(c * 4)
+
+    # Years (DEFCON 19 was 2011)
+    trailing.add("2011")
+    trailing.add("2012")
+    trailing.add("2010")
+
+    # Common four-digit patterns
+    trailing.add("1234")
+    trailing.add("4321")
+    trailing.add("1111")
+    trailing.add("2222")
+    trailing.add("0000")
+    trailing.add("1212")
+    trailing.add("1337")  # leet
+
+    # Mixed patterns (4 chars)
+    trailing.add("!?!?")
+    trailing.add("?!?!")
+    trailing.add("!~!~")
+    trailing.add("~!~!")
+    trailing.add("!1!1")
+    trailing.add("1!1!")
+    trailing.add("?2?2")
+
+    # Five-char patterns
+    # Repeated punctuation
+    for c in single_chars:
+        trailing.add(c * 5)
+
+    # Five digits
+    trailing.add("12345")
+    trailing.add("54321")
+    trailing.add("11111")
+    trailing.add("00000")
+
+    # Six-char patterns (Dean's exact: "maybe 6")
+    # Repeated punctuation (Dean mentioned this specifically)
+    for c in single_chars:
+        trailing.add(c * 6)
+
+    # Six digits
+    trailing.add("123456")
+    trailing.add("654321")
+    trailing.add("111111")
+    trailing.add("000000")
+
+    # Seven-char patterns (one more than Dean mentioned, but reasonable)
+    trailing.add("1234567")
+    trailing.add("!!!!!!!")
+    trailing.add("???????")
+
+    # Eight-char patterns (edge case, but adds coverage)
+    trailing.add("12345678")
+    trailing.add("!!!!!!!!")
+    trailing.add("????????")
+
+    return sorted(list(trailing))
+
+
+# Generate trailing patterns once at module load
+INTELLIGENT_TRAILING = generate_intelligent_trailing()
+print(f"# Generated {len(INTELLIGENT_TRAILING)} trailing patterns", file=sys.stderr)
 
 
 def log_progress(family_num: int, family_name: str):
@@ -68,13 +234,6 @@ def family_1_alternative_leet() -> Generator[str, None, None]:
                 if e or i or o:  # At least one must be true
                     leet_combos.append((e, i, o))
 
-    trailing_chars = "!?~`"
-    max_trailing = 6
-    trailing_full = [""]
-    for length in range(1, max_trailing + 1):
-        for combo in itertools.product(trailing_chars, repeat=length):
-            trailing_full.append("".join(combo))
-
     for template in templates:
         for adj in adjectives_extended:
             phrase = template.replace("{adj}", adj)
@@ -85,7 +244,7 @@ def family_1_alternative_leet() -> Generator[str, None, None]:
                 for e_sub, i_sub, o_sub in leet_combos:
                     leeted = apply_eio_leet(separated_phrase, e_sub, i_sub, o_sub)
 
-                    for trail in trailing_full:
+                    for trail in INTELLIGENT_TRAILING:
                         yield leeted + trail
                         yield leeted.capitalize() + trail
 
@@ -151,7 +310,7 @@ def family_2_hybrid_leet() -> Generator[str, None, None]:
                         for sep in separators:
                             separated = sep.join(phrase.split())
 
-                            for trail in DEAN_TRAILING:
+                            for trail in INTELLIGENT_TRAILING:
                                 yield separated + trail
                                 yield separated.capitalize() + trail
 
@@ -180,12 +339,6 @@ def family_3_emphasis_caps() -> Generator[str, None, None]:
     ]
 
     separators = [" ", ".", "-"]
-    trailing_chars = "!?~`"
-    max_trailing = 6
-    trailing_full = [""]
-    for length in range(1, max_trailing + 1):
-        for combo in itertools.product(trailing_chars, repeat=length):
-            trailing_full.append("".join(combo))
 
     for template in templates:
         # Emphasize each word position
@@ -198,7 +351,7 @@ def family_3_emphasis_caps() -> Generator[str, None, None]:
                 else:
                     phrase = emphasized
 
-                for trail in trailing_full:
+                for trail in INTELLIGENT_TRAILING:
                     yield phrase + trail
 
 
@@ -233,7 +386,7 @@ def family_4_number_infixes() -> Generator[str, None, None]:
                     else:
                         separated = phrase
 
-                    for trail in DEAN_TRAILING:
+                    for trail in INTELLIGENT_TRAILING:
                         yield separated + trail
                         yield separated.capitalize() + trail
 
@@ -266,7 +419,7 @@ def family_5_alternative_intensifiers() -> Generator[str, None, None]:
                     else:
                         separated = phrase
 
-                    for trail in DEAN_TRAILING:
+                    for trail in INTELLIGENT_TRAILING:
                         yield separated + trail
                         yield separated.capitalize() + trail
 
@@ -300,7 +453,7 @@ def family_6_doubled_words() -> Generator[str, None, None]:
                 else:
                     separated = phrase
 
-                for trail in DEAN_TRAILING:
+                for trail in INTELLIGENT_TRAILING:
                     yield separated + trail
                     yield separated.capitalize() + trail
 
@@ -333,7 +486,7 @@ def family_7_longer_quotes() -> Generator[str, None, None]:
             else:
                 separated = phrase
 
-            for trail in DEAN_TRAILING:
+            for trail in INTELLIGENT_TRAILING:
                 yield separated + trail
                 yield separated.capitalize() + trail
 
@@ -400,25 +553,42 @@ def generate_all() -> Generator[str, None, None]:
 # ==================== MAIN ====================
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--count":
+        trailing_count = len(INTELLIGENT_TRAILING)
+        multiplier = trailing_count / 13  # Original had 13 Dean trailing patterns
+
+        print(f"Trailing patterns: {trailing_count}")
+        print(f"Multiplier vs original: {multiplier:.1f}x\n")
         print("Estimating candidate counts...")
         print("\nTIER 1 (High Priority):")
-        print("  Family 1 (Alt leet e/i/o):   ~12,000,000")
-        print("  Family 2 (Hybrid leet):       ~4,000,000")
-        print("  Family 3 (Emphasis caps):     ~2,500,000")
-        print("  Tier 1 Subtotal:             ~18,500,000")
+        print(f"  Family 1 (Alt leet e/i/o):   ~{int(12_000_000 * multiplier):,}")
+        print(f"  Family 2 (Hybrid leet):      ~{int(4_000_000 * multiplier):,}")
+        print(f"  Family 3 (Emphasis caps):    ~{int(2_500_000 * multiplier):,}")
+        tier1 = int((12_000_000 + 4_000_000 + 2_500_000) * multiplier)
+        print(f"  Tier 1 Subtotal:             ~{tier1:,}")
         print("\nTIER 2 (Medium Priority):")
-        print("  Family 4 (Number infixes):      ~800,000")
-        print("  Family 5 (Alt intensifiers):    ~300,000")
-        print("  Family 6 (Doubled words):       ~200,000")
-        print("  Tier 2 Subtotal:              ~1,300,000")
+        print(f"  Family 4 (Number infixes):   ~{int(800_000 * multiplier):,}")
+        print(f"  Family 5 (Alt intensifiers): ~{int(300_000 * multiplier):,}")
+        print(f"  Family 6 (Doubled words):    ~{int(200_000 * multiplier):,}")
+        tier2 = int((800_000 + 300_000 + 200_000) * multiplier)
+        print(f"  Tier 2 Subtotal:             ~{tier2:,}")
         print("\nTIER 3 (Low Priority):")
-        print("  Family 7 (Longer quotes):       ~150,000")
-        print("  Family 8 (Alt patterns):         ~50,000")
-        print("  Tier 3 Subtotal:                ~200,000")
+        print(f"  Family 7 (Longer quotes):    ~{int(150_000 * multiplier):,}")
+        print(f"  Family 8 (Alt patterns):     ~{int(50_000 * multiplier):,}")
+        tier3 = int((150_000 + 50_000) * multiplier)
+        print(f"  Tier 3 Subtotal:             ~{tier3:,}")
         print("\n" + "="*50)
-        print("TOTAL ESTIMATED:              ~20,000,000")
+        total = tier1 + tier2 + tier3
+        print(f"TOTAL ESTIMATED:              ~{total:,}")
         print("="*50)
-        print("\nRuntime at 270k H/s: ~74 seconds (~1.2 minutes)")
+        runtime_seconds = total / 270_000
+        runtime_minutes = runtime_seconds / 60
+        runtime_hours = runtime_minutes / 60
+        if runtime_hours >= 1:
+            print(f"\nRuntime at 270k H/s: ~{runtime_hours:.1f} hours")
+        elif runtime_minutes >= 1:
+            print(f"\nRuntime at 270k H/s: ~{runtime_minutes:.1f} minutes")
+        else:
+            print(f"\nRuntime at 270k H/s: ~{runtime_seconds:.0f} seconds")
     elif len(sys.argv) > 1 and sys.argv[1] == "--sample":
         count = 0
         for candidate in generate_all():
