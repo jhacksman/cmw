@@ -2,14 +2,15 @@
 """
 Passphrase/Password Brute Force with Prefix+Suffix Pattern
 
-Tests "passphrase" and "password" with prefix and suffix combinations
-from `~!? characters, following this pattern:
-- (10,0), (9,1), (8,2), (7,3), (6,4), (5,5), (4,6), (3,7), (2,8), (1,9), (0,10)
-- Then: (0,9), (0,8), (0,7), (0,6), (0,5), (0,4), (0,3), (0,2), (0,1), (0,0)
+Tests "passphrase" and "password" with ALL prefix and suffix combinations
+from `~!? characters where prefix_len + suffix_len <= 10.
+
+This includes all 66 unique (prefix, suffix) pairs:
+(0,0), (0,1), (1,0), (1,1), (0,2), (2,0), (1,2), (2,1), ... up to (10,0) and (0,10)
 
 With case variants and leet variants (plain, numbers, symbols).
 
-~142M candidates total (71M per word)
+~179M candidates total
 """
 
 import itertools
@@ -35,29 +36,14 @@ def apply_leet_symbols(text: str) -> str:
 
 def generate_prefix_suffix_pairs() -> List[Tuple[int, int]]:
     """
-    Generate (prefix_len, suffix_len) pairs following the pattern:
-    (10,0), (9,1), (8,2)... (0,10), then (0,9), (0,8)... (0,0)
+    Generate ALL (prefix_len, suffix_len) pairs where prefix + suffix <= MAX_TOTAL_LENGTH.
+    This gives 66 unique pairs for MAX_TOTAL_LENGTH=10.
     """
     pairs = []
-    
-    # First phase: 10+0 down to 0+10
-    for prefix_len in range(MAX_TOTAL_LENGTH, -1, -1):
-        suffix_len = MAX_TOTAL_LENGTH - prefix_len
-        pairs.append((prefix_len, suffix_len))
-    
-    # Second phase: 0+9 down to 0+0 (0+10 already covered)
-    for suffix_len in range(MAX_TOTAL_LENGTH - 1, -1, -1):
-        pairs.append((0, suffix_len))
-    
-    # Remove duplicate (0,0)
-    seen = set()
-    unique_pairs = []
-    for pair in pairs:
-        if pair not in seen:
-            seen.add(pair)
-            unique_pairs.append(pair)
-    
-    return unique_pairs
+    for prefix_len in range(MAX_TOTAL_LENGTH + 1):
+        for suffix_len in range(MAX_TOTAL_LENGTH + 1 - prefix_len):
+            pairs.append((prefix_len, suffix_len))
+    return pairs
 
 
 def generate_strings(length: int) -> Generator[str, None, None]:
