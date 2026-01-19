@@ -94,7 +94,7 @@ def generate_all() -> Generator[str, None, None]:
     trailing_list = list(generate_trailing())
     
     seen = set()
-    for base in ALL_PHRASES:
+    for base in generate_base_phrases():
         for sep in SEPARATORS:
             phrase = base.replace(" ", sep) if sep != " " else base
             for case_phrase in case_variants(phrase):
