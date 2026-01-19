@@ -121,7 +121,7 @@ def generate_all() -> Generator[str, None, None]:
     trailing_list = list(generate_trailing())
     
     seen = set()
-    for base in BASE_PHRASES:
+    for base in generate_base_phrases():
         for leet_variant in generate_leet_variants(base):
             for sep in SEPARATORS:
                 phrase = leet_variant.replace(" ", sep) if sep != " " else leet_variant
